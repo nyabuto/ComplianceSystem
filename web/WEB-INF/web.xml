@@ -40,6 +40,18 @@
         <servlet-name>load_visits</servlet-name>
         <servlet-class>Loaders.load_visits</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>save_visit</servlet-name>
+        <servlet-class>Compliance.save_visit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_visit_details</servlet-name>
+        <servlet-class>Loaders.load_visit_details</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>details_sess</servlet-name>
+        <servlet-class>Loaders.details_sess</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dbsetup</servlet-name>
         <url-pattern>/dbsetup</url-pattern>
@@ -79,6 +91,18 @@
     <servlet-mapping>
         <servlet-name>load_visits</servlet-name>
         <url-pattern>/load_visits</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>save_visit</servlet-name>
+        <url-pattern>/save_visit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_visit_details</servlet-name>
+        <url-pattern>/load_visit_details</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>details_sess</servlet-name>
+        <url-pattern>/details_sess</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

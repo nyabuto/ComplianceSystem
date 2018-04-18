@@ -40,7 +40,7 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">User Management </li>
+				 <li class="active"><a href="visits_filter.jsp">Visits Filter</a></li>
 			</ol>
 		</div><!--/.row-->
                 <br>

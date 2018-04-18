@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Db/register.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Compliance/load_users.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Db/dbConn.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/topmenu.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/visits.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/users.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Loaders/load_projects.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/register.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/db.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Db/login.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Compliance/new_user.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/tables/styles.css</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Db/dbsetup.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/sidebar.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/index.jsp</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Loaders/load_partners.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Loaders/visit_sess.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Loaders/load_obligations.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/src/java/Db/logout.java</file>
+            <file>file:/C:/GeofreyNyabuto/NetbeansProjects/ComplianceSystem/web/visits_filter.jsp</file>
+        </group>
+    </open-files>
+</project-private>

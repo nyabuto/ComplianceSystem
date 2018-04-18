@@ -27,13 +27,13 @@
 	line-height: 26.4px;
     }    
     .row{
-        margin-top: 5%;
+        margin-top: 10%;
     }
     .header{
         padding-top: 8%;
     } 
     .panel-body{
-        padding-bottom: 25%;
+        padding-bottom: 7%;
     } 
     body{
         max-width: 90%;
@@ -58,18 +58,18 @@
                             
 				<!--<div class="panel-heading">Log in</div>-->
 				<div class="panel-body">
-                                    <form role="form" action="login">
-						<fieldset>
-							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
-							</div>
-							<div class="form-group">
-								<input class="form-control" placeholder="Password" name="password" type="password" value="">
-							</div>
-							<div class="form-group">
-								<input class="form-control btn-info" placeholder="Password" name="password" type="submit" value=" Login">
-							</div>
-							</fieldset>
+                                    <form role="form" method="post" action="login">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+                                            </div>
+                                            <div class="form-group">
+                                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                    <input class="form-control btn-info" placeholder="Password" name="password" type="submit" value=" Login">
+                                            </div>
+                                        </fieldset>
 					</form>
 				</div>
 			</div>

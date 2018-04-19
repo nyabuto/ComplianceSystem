@@ -125,6 +125,35 @@ function visit_changed(){
             todayHighlight: true
      });
 }
+
+function changed_edit(){
+          var review_start_date = $("#review_start_date_edit").val();
+           var visit_date = $("#visit_date_edit").val();
+          $('#review_end_date_edit').val("");
+          $('#review_end_date_edit').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'EN',
+            autoclose: true,
+            startDate: new Date(review_start_date),
+            endDate: new Date(visit_date),
+            setDate: new Date(),
+            todayHighlight: true
+     });
+}
+
+function visit_changed_edit(){
+          var visit_date = $("#visit_date_edit").val();
+//          alert(visit_date);
+          $('#review_start_date_edit').val("");
+          $('#review_start_date_edit').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'EN',
+            autoclose: true,
+            endDate: new Date(visit_date),
+            setDate: new Date(),
+            todayHighlight: true
+     });
+}
     </script>
     
     <script>
@@ -154,8 +183,9 @@ function visit_changed(){
             if( data[i].review_end_date!=null){review_end_date = data[i].review_end_date;}
             if( data[i].visit_date!=null){visit_date = data[i].visit_date;}
             
-            var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu">';
+            var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu  dropdown-menu-right">';
                 output+='<li><a class="btn btn-link" style="text-align:left;" href="details_sess?id='+id+'" /><i class="position-left"></i> Visit Details</a></li>';
+                output+='<li><button class="btn btn-link" onclick=\"edit('+position+');\" ><i class="position-left"></i> Edit</button></li>';
                 output+='<li><button class="btn btn-link" onclick=\"deleter('+position+');\" ><i class="position-left"></i> Delete</button></li>';
                 output+='<input type="hidden" name="'+position+'" value="'+id+'" id="_'+position+'">';
                 output+='</ul></div>';
@@ -298,6 +328,197 @@ function visit_changed(){
      });
 
      
+    }
+   
+    function load_visit(pos){
+        var visit_id = $("#_"+pos).val();
+             $.ajax({
+        url:'load_ind_visit?visit_id='+visit_id,
+        type:"post",
+        dataType:"json",
+        success:function(raw_data){
+         var id,visit_date,review_start_date,review_end_date;
+         var data = raw_data.data;
+             
+             visit_date=review_start_date=review_end_date="";
+             if( data.visit_date!=null){visit_date = data.visit_date;}
+             if( data.review_start_date!=null){review_start_date = data.review_start_date;}
+             if( data.review_end_date!=null){review_end_date = data.review_end_date;}
+         // ouput
+         $("#visit_date_edit").val(visit_date);
+         $("#review_start_date_edit").val(review_start_date);
+         $("#review_end_date_edit").val(review_end_date);
+        }
+  });
+    }
+    function edit(pos){
+        var visit_id = $("#_"+pos).val();
+            var dialog = bootbox.dialog({
+    title: '<b>New Visit</b>',
+    message: '<div class="row">' +
+                    '<div class="col-md-12">' +
+                        '<form id="new_user" method="post" class="form-horizontal">' +
+                           
+                              '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Visit Date <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="visit_date_edit" required name="visit_date" type="text" value="" onChange="visit_changed_edit();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
+                                '</div>' +
+                            '</div>' +
+                            
+                            
+                              '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Review Start Date <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="review_start_date_edit" required name="review_start_date" onChange="changed_edit();" type="text" value="" placeholder="Enter Review Start Date" readonly class="form-control"  style="width:80%;">' +
+                                '</div>' +
+                            '</div>' +
+                            
+                           
+                              '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Review End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="review_end_date_edit" required name="review_end_date" type="text" value="" placeholder="Enter Review End Date" readonly class="form-control"  style="width:80%;">' +
+                                '</div>' +
+                            '</div>' +
+                            
+                         '</form>' +
+                    '</div>' +
+                    '</div>',
+    buttons: {
+        cancel: {
+            label: "Cancel",
+            className: 'btn-danger',
+            callback: function(){
+                
+            }
+        },
+        ok: {
+            label: "Save",
+            className: 'btn-success',
+            callback: function(){
+             //gt values here
+             var visit_date,review_start_date,review_end_date;
+                visit_date = $("#visit_date_edit").val();
+                review_start_date = $("#review_start_date_edit").val();
+                review_end_date = $("#review_end_date_edit").val();
+
+                if(visit_id!="" && visit_date!="" && review_start_date!="" && review_start_date!="" && review_end_date!=""){
+                var form_data = {"visit_id":visit_id,"visit_date":visit_date,"review_start_date":review_start_date,"review_end_date":review_end_date};
+                var theme="",header="",message="";
+                var url = "update_visit";
+                   $.post(url,form_data , function(output) {
+                                    var response = JSON.parse(output).data;
+                                    var response_code=response.code;
+                                   var response_message=response.message;
+                                   message=response_message;
+                                    if(response_code==1){
+                                        theme = "bg-success";
+                                        header = "Success";
+                                        message = response_message;
+                                        //reload data in table
+                                       load_visits(); 
+                                    }
+                                    else{
+                                       theme = "bg-danger";
+                                        header = "Error";
+                                        message = response_message;   
+                                    }
+                                    
+                                    $.jGrowl('close');
+                                    
+                                  $.jGrowl(message, {
+                                        position: 'top-center',
+                                        header: header,
+                                        theme: theme
+                                   });  
+                                 });
+                             
+                         }
+                         else{
+                          $.jGrowl('Enter all the required information', {
+                                        position: 'top-center',
+                                        header: 'Error',
+                                        theme: 'bg-danger'
+                                   });   
+                                   return false;
+                         }
+            }
+        }
+    }
+    });
+     $('#visit_date_edit').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'EN',
+            autoclose: true,
+            endDate: new Date(),
+            setDate: new Date(),
+            todayHighlight: true
+     });
+
+     load_visit(pos);
+    }
+    
+        function deleter(pos){
+                   var id = $("#_"+pos).val();   
+       bootbox.confirm({
+        title: "<b  style='text-align:center;'>Delete Visit<b>",
+        message: "Are you sure you want to delete this visit?",
+        buttons: {
+            confirm: {
+                label: '<i class="fa fa-check"></i> Yes'
+//                className: 'btn-success'
+            },
+            cancel: {
+                label: '<i class="fa fa-times"></i> No ',
+                className: 'btn-danger'
+            }
+        },
+        callback: function (result) {
+            if(result){
+                if(id!=""){
+                var form_data = {"visit_id":id};
+                var theme="",header="",message="";
+                var url = "delete_visit";
+                   $.post(url,form_data , function(output) {
+                                    var response = JSON.parse(output).data;
+                                    var response_code=response.code;
+                                   var response_message=response.message;
+                                   message=response_message;
+                                    if(response_code==1){
+                                        theme = "bg-success";
+                                        header = "Success";
+                                        message = response_message;
+                                        //reload data in table
+                                       load_visits(); 
+                                    }
+                                    else{
+                                       theme = "bg-danger";
+                                        header = "Error";
+                                        message = response_message;   
+                                    }
+                                    
+                                    $.jGrowl('close');
+                                    
+                                  $.jGrowl(message, {
+                                        position: 'top-center',
+                                        header: header,
+                                        theme: theme
+                                   });  
+                                 });
+                             
+                         }
+                         else{
+                          $.jGrowl('Missing entry to be deleted', {
+                                        position: 'top-center',
+                                        header: 'Error',
+                                        theme: 'bg-danger'
+                                   });   
+                                   return false;
+                         }   
+            }
+        }
+    });
     }
     </script>
 </body>

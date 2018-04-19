@@ -1,6 +1,6 @@
 <%-- 
-    Document   : visit_details
-    Created on : Apr 18, 2018, 4:13:39 PM
+    Document   : areas
+    Created on : Apr 19, 2018, 4:23:03 PM
     Author     : GNyabuto
 --%>
 
@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="images/hsdsa/icon.png" style="height: 20px;padding: 0px; margin: 0px;"/>
-	<title>Partner's Visits Observations</title>
+	<title>Areas of Observation</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
@@ -40,27 +40,20 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-                                <li class="active"><a href="visits_filter.jsp">Visits Filter</a></li>
-                                <li class="active"><a href="visits.jsp">Visits</a></li>
-                                <li class="active"><a href="visit_details.jsp">Visit Details</a></li>
+                                <li class="active"><a href="areas.jsp">Areas of Observation</a></li>
 			</ol>
 		</div><!--/.row-->
                 <br>
             <div>
-               <button type="button" class="btn btn-success btn-raised" onclick="new_observation();" style="margin-left: 1%; margin-bottom: 1%; font-weight: 900;"><i class="icon-plus3 position-left"></i> New Observation</button>
+               <button type="button" class="btn btn-success btn-raised" onclick="new_area();" style="margin-left: 1%; margin-bottom: 1%; font-weight: 900;"><i class="icon-plus3 position-left"></i> New Area Observation</button>
            </div>
         <table id="data_table"  class="display cell-border row-border" style="width:100%">
        <thead>
             <tr> 
          <th> No </th>
          <th> Area of Observation</th>
-         <th> Observation</th>
-         <th> Implication </th>
-         <th> Control Measure</th>
-         <th>Recommendation</th>
-         <th>Responsibility</th>
-         <th>Timeline</th>
-         <th> Implementation<br>Status</th>
+         <th> Description</th>
+         <th> Status </th>
          <th> Action</th>
         </tr>
         </thead>
@@ -97,72 +90,43 @@
    $(document).ready(function() {
    
 }); 
-
-function changed(){
-          var review_start_date = $("#review_start_date").val();
-           var visit_date = $("#visit_date").val();
-          $('#review_end_date').val("");
-          $('#review_end_date').datepicker({
-            format: 'yyyy-mm-dd',
-            language: 'EN',
-            autoclose: true,
-            startDate: new Date(review_start_date),
-            endDate: new Date(visit_date),
-            setDate: new Date(),
-            todayHighlight: true
-     });
-}
-
-function visit_changed(){
-          var visit_date = $("#visit_date").val();
-//          alert(visit_date);
-          $('#review_start_date').val("");
-          $('#review_start_date').datepicker({
-            format: 'yyyy-mm-dd',
-            language: 'EN',
-            autoclose: true,
-            endDate: new Date(visit_date),
-            setDate: new Date(),
-            todayHighlight: true
-     });
-}
     </script>
     
     <script>
    $(document).ready(function() {
-        load_visits_details();
+        load_areas();
     });
     
-    function load_visits_details(){
+    function load_areas(){
             $.ajax({
-        url:'load_visit_details',
+        url:'load_areas',
         type:"post",
         dataType:"json",
         success:function(raw_data){
-            var position=0,id,area,observation,implication,control_measure,recommendation,responsibility,timeline,implementation_status,output="";
+            var position=0,id,area,description,status,status_label,output="";
              var dataSet=[];
         var data=raw_data.data;
         for (var i=0; i<data.length;i++){
             position++;
-            id=area=observation=implication=control_measure=recommendation=responsibility=timeline=implementation_status="";
+            id=area=description=status="";
             if( data[i].id!=null){id = data[i].id;}
             if( data[i].area!=null){area = data[i].area;}
-            if( data[i].observation!=null){observation = data[i].observation;}
-            if( data[i].implication!=null){implication = data[i].implication;}
-            if( data[i].control_measure!=null){control_measure = data[i].control_measure;}
-            if( data[i].recommendation!=null){recommendation = data[i].recommendation;}
-            if( data[i].responsibility!=null){responsibility = data[i].responsibility;}
-            if( data[i].timeline!=null){timeline = data[i].timeline;}
-            if( data[i].implementation_status!=null){implementation_status = data[i].implementation_status;}
+            if( data[i].description!=null){description = data[i].description;}
+            if( data[i].is_active!=null){status = data[i].is_active;}
             
             var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu  dropdown-menu-right">';
-                output+='<li><button class="btn btn-link" onclick=\"update_observation('+position+');\" ><i class="position-left"></i>Update Observation Outcome</button></li>';
                 output+='<li><button class="btn btn-link" onclick=\"edit_observation('+position+');\" ><i class="position-left"></i> Edit Observation</button></li>';
                 output+='<li><button class="btn btn-link" onclick=\"delete_entry('+position+');\" ><i class="position-left"></i> Delete Observation</button></li>';
                 output+='<input type="hidden" name="'+position+'" value="'+id+'" id="_'+position+'">';
                 output+='</ul></div>';
+         if(status==1){
+               status_label = '<span class="label label-success">Active</span> ';  
+            }
+            else{
+                status_label = '<span class="label label-danger">Inactive</span> ';   
+            }
          
-            var minSet = [position,area,observation,implication,control_measure,recommendation,responsibility,timeline,implementation_status,output];
+            var minSet = [position,area,description,status_label,output];
            
            dataSet.push(minSet);
         }
@@ -193,35 +157,9 @@ function visit_changed(){
     }
     });
     }
-    
-    function load_areas(){
-              $.ajax({
-        url:'load_areas',
-        type:"post",
-        dataType:"json",
-        success:function(raw_data){
-         var id,area,description,is_active,is_selected;
-         var data = raw_data.data;
-         var output="";
-         output += "<option value =''>Choose Areas of Observation</option>"; 
-         for(var i=0;i<data.length;i++){
-            id=area=description=is_active=is_selected="";
-             if( data[i].id!=null){id = data[i].id;}
-             if( data[i].area!=null){area = data[i].area;}
-             if( data[i].description!=null){description = data[i].description;}
-             if( data[i].is_active!=null){is_active = data[i].is_active;}
 
-             if(is_active==1){
-              output += "<option value ="+id+" >"+area+"</option>";   
-             }
-         }
-         // ouput
-         $("#area").html(output);
-        }
-  });
-    }
     
-    function new_observation(){
+    function new_area(){
             
             var dialog = bootbox.dialog({
     title: '<b>New Observation</b>',
@@ -229,19 +167,18 @@ function visit_changed(){
                     '<div class="col-md-12">' +
                         '<form id="new_observation" method="post" class="form-horizontal">' +
                            
-                             '<div class="form-group">' +
+                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Area of Observation <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<select id="area" required name="area" class="form-control" required  style="width:80%;">'+
-                                    '<option value="">Select an Area</option>'+
-                                    '</select>' +
+                                    '<input id="area" required name="area" type="text" value="" placeholder="Enter observation" class="form-control"  style="width:80%;"/>' +
                                 '</div>' +
                             '</div>' +
                             
+                           
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Observation <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Description <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<textarea id="observation" required name="observation" type="text" value="" placeholder="Enter observation" class="form-control"  style="width:80%;"></textarea>' +
+                                    '<textarea id="description" required name="description" type="text" value="" placeholder="Enter Description" class="form-control"  style="width:80%;"></textarea>' +
                                 '</div>' +
                             '</div>' +
                             
@@ -270,7 +207,7 @@ function visit_changed(){
                 if(area!="" && observation!=""){
                 var form_data = {"area":area,"observation":observation};
                 var theme="",header="",message="";
-                var url = "save_observation";
+                var url = "save_area";
                    $.post(url,form_data , function(output) {
                                     var response = JSON.parse(output).data;
                                     var response_code=response.code;

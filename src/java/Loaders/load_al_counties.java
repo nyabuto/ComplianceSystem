@@ -23,10 +23,9 @@ import org.json.simple.JSONObject;
  *
  * @author GNyabuto
  */
-public class load_projects extends HttpServlet {
+public class load_al_counties extends HttpServlet {
 HttpSession session;
-String id,name,is_active,is_selected;
-String counties;
+String id,county;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
@@ -34,53 +33,23 @@ String counties;
            session = request.getSession();
            dbConn conn = new dbConn();
            
-            JSONObject finalobj = new JSONObject();
+           JSONObject finalobj = new JSONObject();
             JSONArray jarray = new JSONArray();
-            
-            
-            String getprojects = "SELECT id,name,is_active FROM project order by name ASC";
-            conn.pst = conn.conn.prepareStatement(getprojects);
-            conn.rs = conn.pst.executeQuery();
-            while(conn.rs.next()){
-              id = conn.rs.getString(1);
-              name = conn.rs.getString(2);
-              is_active = conn.rs.getString(3);
-              
-              if(session.getAttribute("project_id")!=null){
-                  if(session.getAttribute("project_id").toString().equals(id)){
-                      is_selected = "selected";
-                  }
-                  else{
-                      is_selected = ""; 
-                  }
-              }
-              else{
-                   is_selected = "";
-              }
-              
-             //get operating counties
-             counties="";
-              String getc = "SELECT county FROM project_county LEFT JOIN county ON project_county.county_id=county.id WHERE project_id=?";
-              conn.pst1 = conn.conn.prepareStatement(getc);
-              conn.pst1.setString(1, id);
-              conn.rs1 = conn.pst1.executeQuery();
-              while(conn.rs1.next()){
-                  counties+=conn.rs1.getString(1)+", ";
-              }
-              
-              if(!counties.equals("")){
-              counties = removeLast(counties, 2);
-              }
-              JSONObject obj = new JSONObject();
-              obj.put("id", id);
-              obj.put("name", name);
-              obj.put("is_active", is_active);
-              obj.put("counties", counties);
-              
-              jarray.add(obj);
-            }
            
-            finalobj.put("data", jarray);
+           String getcounties = "SELECT id,county FROM county ORDER BY county";
+           conn.rs = conn.st.executeQuery(getcounties);
+           while(conn.rs.next()){
+               id = conn.rs.getString(1);
+               county = conn.rs.getString(2);
+               
+               JSONObject obj = new JSONObject();
+               obj.put("id", id);
+               obj.put("county", county);
+               
+               jarray.add(obj);
+           }
+           
+           finalobj.put("data",jarray);
             out.println(finalobj);
         }
     }
@@ -100,7 +69,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(load_al_counties.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -118,7 +87,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(load_al_counties.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -132,10 +101,4 @@ String counties;
         return "Short description";
     }// </editor-fold>
 
-          public String removeLast(String str, int num) {
-    if (str != null && str.length() > 0) {
-        str = str.substring(0, str.length() - num);
-    }
-    return str;
-    }
 }

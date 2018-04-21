@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Loaders;
+package Compliance;
 
 import Db.dbConn;
 import java.io.IOException;
@@ -16,71 +16,72 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
  *
  * @author GNyabuto
  */
-public class load_projects extends HttpServlet {
+public class delete_project extends HttpServlet {
 HttpSession session;
-String id,name,is_active,is_selected;
-String counties;
+String project_id,message;
+int code;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            session = request.getSession();
-           dbConn conn = new dbConn();
-           
-            JSONObject finalobj = new JSONObject();
-            JSONArray jarray = new JSONArray();
+            dbConn conn = new dbConn();
             
             
-            String getprojects = "SELECT id,name,is_active FROM project order by name ASC";
-            conn.pst = conn.conn.prepareStatement(getprojects);
+            project_id = request.getParameter("project_id");
+            
+               if(session.getAttribute("level")!=null){
+          if(session.getAttribute("level").toString().equals("1")){
+            String checker = "SELECT id FROM partner WHERE project_id=?";
+            conn.pst = conn.conn.prepareStatement(checker);
+            conn.pst.setString(1, project_id);
+            
             conn.rs = conn.pst.executeQuery();
-            while(conn.rs.next()){
-              id = conn.rs.getString(1);
-              name = conn.rs.getString(2);
-              is_active = conn.rs.getString(3);
-              
-              if(session.getAttribute("project_id")!=null){
-                  if(session.getAttribute("project_id").toString().equals(id)){
-                      is_selected = "selected";
-                  }
-                  else{
-                      is_selected = ""; 
-                  }
-              }
-              else{
-                   is_selected = "";
-              }
-              
-             //get operating counties
-             counties="";
-              String getc = "SELECT county FROM project_county LEFT JOIN county ON project_county.county_id=county.id WHERE project_id=?";
-              conn.pst1 = conn.conn.prepareStatement(getc);
-              conn.pst1.setString(1, id);
-              conn.rs1 = conn.pst1.executeQuery();
-              while(conn.rs1.next()){
-                  counties+=conn.rs1.getString(1)+", ";
-              }
-              
-              if(!counties.equals("")){
-              counties = removeLast(counties, 2);
-              }
-              JSONObject obj = new JSONObject();
-              obj.put("id", id);
-              obj.put("name", name);
-              obj.put("is_active", is_active);
-              obj.put("counties", counties);
-              
-              jarray.add(obj);
+              System.out.println(conn.pst);
+            if(conn.rs.next()){
+               code = 0;
+               message = "This project cannot be deleted. Several partners have been added under it.";
             }
-           
-            finalobj.put("data", jarray);
+            else{
+              String deleter = "DELETE FROM project WHERE id=?";
+          conn.pst = conn.conn.prepareStatement(deleter);
+          conn.pst.setString(1, project_id);
+          
+          int num = conn.pst.executeUpdate();
+          if(num>0){
+              code = 1;
+              message = "Project details deleted successfully.";
+              
+              conn.st.executeUpdate("DELETE FROM project_county WHERE project_id='"+project_id+"'");
+          }
+          else{
+           code = 0;
+           message = "No changes made to the system. Try again";
+        }  
+            }
+            }
+          else{
+          code = 0;
+         message = "Error. You do not have permissions to delete project.";     
+          }
+          }
+          else{
+              code = 0;
+              message = "Error. Unknown user. Login a fresh to do any operation.";
+          }
+           JSONObject finalobj = new JSONObject();
+            JSONObject obj = new JSONObject();
+            
+            obj.put("code", code);
+            obj.put("message", message);
+            
+            finalobj.put("data", obj);
             out.println(finalobj);
         }
     }
@@ -100,7 +101,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(delete_project.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -118,7 +119,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(delete_project.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -132,10 +133,4 @@ String counties;
         return "Short description";
     }// </editor-fold>
 
-          public String removeLast(String str, int num) {
-    if (str != null && str.length() > 0) {
-        str = str.substring(0, str.length() - num);
-    }
-    return str;
-    }
 }

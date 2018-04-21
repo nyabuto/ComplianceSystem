@@ -1,6 +1,6 @@
 <%-- 
-    Document   : areas
-    Created on : Apr 19, 2018, 4:23:03 PM
+    Document   : projects
+    Created on : Apr 20, 2018, 12:25:09 PM
     Author     : GNyabuto
 --%>
 
@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="images/hsdsa/icon.png" style="height: 20px;padding: 0px; margin: 0px;"/>
-	<title>Areas of Observation</title>
+	<title>Projects</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
@@ -22,7 +22,6 @@
         <link href="css/components.css" rel="stylesheet" type="text/css">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-       
 </head>
 <body>
     <div class="topmenu"><!--  start of top menu here --->
@@ -40,25 +39,24 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-                                <li class="active"><a href="areas.jsp">Areas of Observation</a></li>
+                                <li class="active"><a href="projects.jsp">Projects</a></li>
 			</ol>
 		</div><!--/.row-->
                 <br>
             <div>
-               <button type="button" class="btn btn-success btn-raised" onclick="new_area();" style="margin-left: 1%; margin-bottom: 1%; font-weight: 900;"><i class="icon-plus3 position-left"></i> New Area Observation</button>
+               <button type="button" class="btn btn-success btn-raised" onclick="new_project();" style="margin-left: 1%; margin-bottom: 1%; font-weight: 900;"><i class="icon-plus3 position-left"></i> New Project</button>
            </div>
         <table id="data_table"  class="display cell-border row-border" style="width:100%">
        <thead>
             <tr> 
          <th> No </th>
-         <th> Area of Observation</th>
-         <th> Description</th>
-         <th> Status </th>
+         <th> Project Name</th>
+         <th> Counties of Operation</th>
+         <th> Status</th>
          <th> Action</th>
         </tr>
         </thead>
         <tbody>
-        
         </tbody>
         </table>
 	</div>	<!--/.main-->
@@ -94,24 +92,24 @@
     
     <script>
    $(document).ready(function() {
-        load_areas();
+        load_projects();
     });
     
-    function load_areas(){
+    function load_projects(){
             $.ajax({
-        url:'load_areas',
+        url:'load_projects',
         type:"post",
         dataType:"json",
         success:function(raw_data){
-            var position=0,id,area,description,status,status_label,output="";
+            var position=0,id,name,counties,status,status_label,output="";
              var dataSet=[];
         var data=raw_data.data;
         for (var i=0; i<data.length;i++){
             position++;
-            id=area=description=status="";
+            id=name=counties=status="";
             if( data[i].id!=null){id = data[i].id;}
-            if( data[i].area!=null){area = data[i].area;}
-            if( data[i].description!=null){description = data[i].description;}
+            if( data[i].name!=null){name = data[i].name;}
+            if( data[i].counties!=null){counties = data[i].counties;}
             if( data[i].is_active!=null){status = data[i].is_active;}
             
             var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu  dropdown-menu-right">';
@@ -126,7 +124,7 @@
                 status_label = '<span class="label label-danger">Inactive</span> ';   
             }
          
-            var minSet = [position,area,description,status_label,output];
+            var minSet = [position,name,counties,status_label,output];
            
            dataSet.push(minSet);
         }
@@ -159,31 +157,28 @@
     }
 
     
-    function new_area(){
-            
+    function new_project(){
             var dialog = bootbox.dialog({
-    title: '<b>New Area of Observation</b>',
+    title: '<b>New Project Details</b>',
     message: '<div class="row">' +
                     '<div class="col-md-12">' +
-                        '<form id="new_observation" method="post" class="form-horizontal">' +
+                        '<form id="new_project" method="post" class="form-horizontal">' +
                            
-                              '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Area of Observation <b style=\"color:red\">*</b> : </label>' +
+                             '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<input id="area" required name="area" type="text" value="" placeholder="Enter observation" class="form-control"  style="width:80%;"/>' +
+                                    '<select id="county" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required multiple style="width:80%;">'+
+                                    '</select>' +
                                 '</div>' +
                             '</div>' +
                             
-                           
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Description <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Project Name <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<textarea id="description" required name="description" type="text" value="" placeholder="Enter Description" class="form-control"  style="width:80%;"></textarea>' +
+                                    '<input id="project" required name="project" type="text" value="" placeholder="Enter project name" class="form-control"  style="width:80%;"/>' +
                                 '</div>' +
                             '</div>' +
                             
-                           
-                           
                          '</form>' +
                     '</div>' +
                     '</div>',
@@ -200,14 +195,14 @@
             className: 'btn-success',
             callback: function(){
              //gt values here
-             var area,observation;
-                area = $("#area").val();
-                observation = $("#observation").val();
-
-                if(area!="" && observation!=""){
-                var form_data = {"area":area,"observation":observation};
+             var project,counties;
+                project = $("#project").val();
+                counties = $("#county").val();
+                counties = counties.toString();
+                if(project!="" && counties!=null){
+                var form_data = {"project":project,"counties":counties};
                 var theme="",header="",message="";
-                var url = "save_area";
+                var url = "save_project";
                    $.post(url,form_data , function(output) {
                                     var response = JSON.parse(output).data;
                                     var response_code=response.code;
@@ -218,7 +213,7 @@
                                         header = "Success";
                                         message = response_message;
                                         //reload data in table
-                                       load_areas(); 
+                                       load_projects(); 
                                     }
                                     else{
                                        theme = "bg-danger";
@@ -251,14 +246,36 @@
     
     });
     
-    load_areas();
+    load_counties();
     }
     
+    
+    function load_counties(){
+       $.ajax({
+        url:'load_al_counties',
+        type:"post",
+        dataType:"json",
+        success:function(raw_data){
+            var position=0,id,county,output="";
+             var dataSet=[];
+        var data=raw_data.data;
+        //output = "<option value=''>Choose Counties</option>";
+        for (var i=0; i<data.length;i++){
+            position++;
+            id=county="";
+            if( data[i].id!=null){id = data[i].id;}
+            if( data[i].county!=null){county = data[i].county;}
+            output+="<option value='"+id+"'>"+county+"</option>";
+        }
+        $("#county").html(output);
+    }
+});
+}
     function delete_entry(pos){
                    var id = $("#_"+pos).val();   
        bootbox.confirm({
-        title: "<b  style='text-align:center;'>Delete Area of Observation<b>",
-        message: "Are you sure you want to delete this area of observation?",
+        title: "<b  style='text-align:center;'>Delete Project<b>",
+        message: "Are you sure you want to delete this project?",
         buttons: {
             confirm: {
                 label: '<i class="fa fa-check"></i> Yes'
@@ -272,9 +289,9 @@
         callback: function (result) {
             if(result){
                 if(id!=""){
-                var form_data = {"area_id":id};
+                var form_data = {"project_id":id};
                 var theme="",header="",message="";
-                var url = "delete_area";
+                var url = "delete_project";
                    $.post(url,form_data , function(output) {
                                     var response = JSON.parse(output).data;
                                     var response_code=response.code;
@@ -285,7 +302,7 @@
                                         header = "Success";
                                         message = response_message;
                                         //reload data in table
-                                       load_areas(); 
+                                       load_projects(); 
                                     }
                                     else{
                                        theme = "bg-danger";
@@ -316,22 +333,22 @@
     });
     }
     
-    function load_ind_area(pos){
+    function load_ind_project(pos){
            var id = $("#_"+pos).val();
        $.ajax({
-        url:'load_ind_area?area_id='+id,
+        url:'load_ind_project?project_id='+id,
         type:"post",
         dataType:"json",
         success:function(raw_data){
-         var id,areas,description,is_active,timestamp;
+         var id,project,counties,is_active;
          var data = raw_data.data;
              
-             id=areas=description="";
-             if( data.area!=null){areas = data.area;}
-             if( data.description!=null){description = data.description;}
+             id=project=counties="";
+             if( data.project!=null){project = data.project;}
+             if( data.counties!=null){counties = data.counties;}
          // ouput
-         $("#area_edit").val(areas);
-         $("#description_edit").val(description);
+         $("#project_edit").val(project);
+         $("#county_edit").html(counties);
         }
   });   
     }
@@ -339,25 +356,25 @@
     function edit_area(pos){
      var id = $("#_"+pos).val();        
             var dialog = bootbox.dialog({
-    title: '<b>Edit Area of Operation</b>',
+    title: '<b>New Observation</b>',
     message: '<div class="row">' +
                     '<div class="col-md-12">' +
-                        '<form id="new_observation" method="post" class="form-horizontal">' +
+                        '<form id="edit_project" method="post" class="form-horizontal">' +
                            
-                             '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Area of Observation <b style=\"color:red\">*</b> : </label>' +
+                    '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<input id="area_edit" required name="area" class="form-control" required placeholder="Enter area of observation"  style="width:80%;"/>'+
+                                    '<select id="county_edit" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required multiple style="width:80%;">'+
+                                    '</select>' +
+                                '</div>' +
+                            '</div>' +
+                             '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Edit Project name <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="project_edit" required name="area" class="form-control" required placeholder="Enter Project Name"  style="width:80%;"/>'+
                                 '</div>' +
                             '</div>' +
                             
-                              '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Observation <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
-                                    '<textarea id="description_edit" required name="description_edit" type="text" value="" placeholder="Enter observation" class="form-control"  style="width:80%;"></textarea>' +
-                                '</div>' +
-                            '</div>' +
-                          
                          '</form>' +
                     '</div>' +
                     '</div>',
@@ -374,14 +391,15 @@
             className: 'btn-success',
             callback: function(){
              //gt values here
-             var area,description;
-                area = $("#area_edit").val();
-                description = $("#description_edit").val();
-
-                if(area!=""){
-                var form_data = {"area_id":id,"area":area,"description":description};
+             var project,counties;
+                project = $("#project_edit").val();
+                counties = $("#county_edit").val();
+                counties = counties.toString();
+                
+                if(project!="" && counties!=null){
+                var form_data = {"project_id":id,"project":project,"counties":counties};
                 var theme="",header="",message="";
-                var url = "update_area";
+                var url = "update_project";
                    $.post(url,form_data , function(output) {
                                     var response = JSON.parse(output).data;
                                     var response_code=response.code;
@@ -392,7 +410,7 @@
                                         header = "Success";
                                         message = response_message;
                                         //reload data in table
-                                       load_areas(); 
+                                       load_projects(); 
                                     }
                                     else{
                                        theme = "bg-danger";
@@ -425,7 +443,7 @@
     
     });
     
-    load_ind_area(pos);
+    load_ind_project(pos);
     }
     </script>
 </body>

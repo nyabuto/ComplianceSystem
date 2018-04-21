@@ -92,6 +92,42 @@
         <servlet-name>load_ind_visit</servlet-name>
         <servlet-class>Loaders.load_ind_visit</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>save_area</servlet-name>
+        <servlet-class>Compliance.save_area</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>update_area</servlet-name>
+        <servlet-class>Compliance.update_area</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>delete_area</servlet-name>
+        <servlet-class>Compliance.delete_area</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_ind_area</servlet-name>
+        <servlet-class>Loaders.load_ind_area</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_ind_project</servlet-name>
+        <servlet-class>Loaders.load_ind_project</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>update_project</servlet-name>
+        <servlet-class>Compliance.update_project</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>delete_project</servlet-name>
+        <servlet-class>Compliance.delete_project</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>save_project</servlet-name>
+        <servlet-class>Compliance.save_project</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_al_counties</servlet-name>
+        <servlet-class>Loaders.load_al_counties</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dbsetup</servlet-name>
         <url-pattern>/dbsetup</url-pattern>
@@ -184,9 +220,45 @@
         <servlet-name>load_ind_visit</servlet-name>
         <url-pattern>/load_ind_visit</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>save_area</servlet-name>
+        <url-pattern>/save_area</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>update_area</servlet-name>
+        <url-pattern>/update_area</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>delete_area</servlet-name>
+        <url-pattern>/delete_area</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_ind_area</servlet-name>
+        <url-pattern>/load_ind_area</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_ind_project</servlet-name>
+        <url-pattern>/load_ind_project</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>update_project</servlet-name>
+        <url-pattern>/update_project</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>delete_project</servlet-name>
+        <url-pattern>/delete_project</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>save_project</servlet-name>
+        <url-pattern>/save_project</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_al_counties</servlet-name>
+        <url-pattern>/load_al_counties</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            -1
         </session-timeout>
     </session-config>
 </web-app>

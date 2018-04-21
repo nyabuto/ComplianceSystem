@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Loaders;
+package Compliance;
 
 import Db.dbConn;
 import java.io.IOException;
@@ -16,71 +16,62 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
  *
  * @author GNyabuto
  */
-public class load_projects extends HttpServlet {
+public class save_area extends HttpServlet {
 HttpSession session;
-String id,name,is_active,is_selected;
-String counties;
+String area,description;
+String message;
+int code;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           session = request.getSession();
-           dbConn conn = new dbConn();
-           
+          session = request.getSession();
+          dbConn conn = new dbConn();
+          
             JSONObject finalobj = new JSONObject();
-            JSONArray jarray = new JSONArray();
             
+            area = request.getParameter("area");
+            description = request.getParameter("description");
             
-            String getprojects = "SELECT id,name,is_active FROM project order by name ASC";
-            conn.pst = conn.conn.prepareStatement(getprojects);
+            String checker = "SELECT id FROM area WHERE name=? OR (description=? AND description IS NOT NULL AND description!=?)";
+            conn.pst = conn.conn.prepareStatement(checker);
+            conn.pst.setString(1, area);
+            conn.pst.setString(2, description);
+            conn.pst.setString(3, "");
+            
             conn.rs = conn.pst.executeQuery();
-            while(conn.rs.next()){
-              id = conn.rs.getString(1);
-              name = conn.rs.getString(2);
-              is_active = conn.rs.getString(3);
-              
-              if(session.getAttribute("project_id")!=null){
-                  if(session.getAttribute("project_id").toString().equals(id)){
-                      is_selected = "selected";
-                  }
-                  else{
-                      is_selected = ""; 
-                  }
-              }
-              else{
-                   is_selected = "";
-              }
-              
-             //get operating counties
-             counties="";
-              String getc = "SELECT county FROM project_county LEFT JOIN county ON project_county.county_id=county.id WHERE project_id=?";
-              conn.pst1 = conn.conn.prepareStatement(getc);
-              conn.pst1.setString(1, id);
-              conn.rs1 = conn.pst1.executeQuery();
-              while(conn.rs1.next()){
-                  counties+=conn.rs1.getString(1)+", ";
-              }
-              
-              if(!counties.equals("")){
-              counties = removeLast(counties, 2);
-              }
-              JSONObject obj = new JSONObject();
-              obj.put("id", id);
-              obj.put("name", name);
-              obj.put("is_active", is_active);
-              obj.put("counties", counties);
-              
-              jarray.add(obj);
+            if(conn.rs.next()){
+                code = 0;
+                message = "Similar area of operation exist within the system.";
             }
-           
-            finalobj.put("data", jarray);
+            else{
+                String inserter = "INSERT INTO area (name,description) VALUES(?,?)";
+                conn.pst = conn.conn.prepareStatement(inserter);
+                conn.pst.setString(1, area);
+                conn.pst.setString(2, description);
+                
+                int num = conn.pst.executeUpdate();
+                if(num>0){
+                    code = 1;
+                    message = "Area added  successfully";
+                }
+                else{
+                    code = 0;
+                    message = "No changes detected.";
+                }
+            }
+            
+            JSONObject obj = new JSONObject();
+            obj.put("code", code);
+            obj.put("message", message);
+            
+            finalobj.put("data", obj);
             out.println(finalobj);
         }
     }
@@ -100,7 +91,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(save_area.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -118,7 +109,7 @@ String counties;
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_projects.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(save_area.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -132,10 +123,4 @@ String counties;
         return "Short description";
     }// </editor-fold>
 
-          public String removeLast(String str, int num) {
-    if (str != null && str.length() > 0) {
-        str = str.substring(0, str.length() - num);
-    }
-    return str;
-    }
 }

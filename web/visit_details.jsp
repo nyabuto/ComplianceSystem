@@ -58,9 +58,7 @@
          <th> Implication </th>
          <th> Control Measure</th>
          <th>Recommendation</th>
-         <th>Responsibility</th>
-         <th>Timeline</th>
-         <th> Implementation<br>Status</th>
+         <th>Responsibility, Timeline &<br>Implementation Status</th>
          <th> Action</th>
         </tr>
         </thead>
@@ -161,8 +159,8 @@ function visit_changed(){
                 output+='<li><button class="btn btn-link" onclick=\"delete_entry('+position+');\" ><i class="position-left"></i> Delete Observation</button></li>';
                 output+='<input type="hidden" name="'+position+'" value="'+id+'" id="_'+position+'">';
                 output+='</ul></div>';
-         
-            var minSet = [position,area,observation,implication,control_measure,recommendation,responsibility,timeline,implementation_status,output];
+         var respons_timeline_status="<b><u>Responsibility:</u></b><br>"+responsibility+"<br><b><u>Timeline:</u></b><br>"+timeline+"<br><b><u>Implementation Status:</u></b><br>"+implementation_status;
+            var minSet = [position,area,observation,implication,control_measure,recommendation,respons_timeline_status,output];
            
            dataSet.push(minSet);
         }
@@ -402,7 +400,7 @@ function visit_changed(){
     function edit_observation(pos){
      var details_id = $("#_"+pos).val();        
             var dialog = bootbox.dialog({
-    title: '<b>New Observation</b>',
+    title: '<b>Edit Observation</b>',
     message: '<div class="row">' +
                     '<div class="col-md-12">' +
                         '<form id="new_observation" method="post" class="form-horizontal">' +

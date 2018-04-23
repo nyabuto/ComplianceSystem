@@ -37,7 +37,7 @@
        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#">
+                            <li><a href="users.jsp">
 					<em class="fa fa-home"></em>
 				</a></li>
 				<li class="active">User Management </li>
@@ -338,32 +338,35 @@
                    if(status==1){
                     status_label="De-activate Instead" ;  
                    }
-                   else if(status==0){
+                   else{
                     status_label="Activate Instead" ;  
                    }
        var dialog = bootbox.dialog({
         title: "<b  style='text-align:center;'>Delete/Deactivate User<b>",
-        message: "Are you sure you want to delete this partner?",
+        message: "Are you sure you want to delete this user?",
         buttons: {
-            ok: {
-                label: '<i class="fa fa-check"></i> Yes',
-                className: 'btn-success'
+            cancel: {
+                label: '<i class="fa fa-times"></i> No ',
+                className: 'btn-danger', 
+                callback: function(){
+
+                }
             },
             activate: {
                 label: '<i class="fa fa-check"></i> '+status_label,
-                className: 'btn-warning'
-            },
-            cancel: {
-                label: '<i class="fa fa-times"></i> No ',
-                className: 'btn-danger'
-            }
-        },
-        callback: function (result) {
-            if(result){
-                if(id!=""){
-                var form_data = {"partner_id":id};
+                className: 'btn-warning', 
+                callback: function(){
+                    var status = $("#status_"+pos).val(); 
+                    if(status==1){
+                        status=0;
+                    }
+                    else{
+                       status=1; 
+                    }
+                            if(id!=""){
+                var form_data = {"user_id":id,"status":status};
                 var theme="",header="",message="";
-                var url = "delete_partner";
+                var url = "user_status";
                    $.post(url,form_data , function(output) {
                                     var response = JSON.parse(output).data;
                                     var response_code=response.code;
@@ -374,7 +377,7 @@
                                         header = "Success";
                                         message = response_message;
                                         //reload data in table
-                                       load_partners(); 
+                                       load_users(); 
                                     }
                                     else{
                                        theme = "bg-danger";
@@ -399,8 +402,56 @@
                                         theme: 'bg-danger'
                                    });   
                                    return false;
-                         }   
+                         }
+                }
+            },
+            ok: {
+                label: '<i class="fa fa-check"></i> Yes',
+                className: 'btn-success', 
+                callback: function(){
+                            if(id!=""){
+                var form_data = {"user_id":id};
+                var theme="",header="",message="";
+                var url = "delete_user";
+                   $.post(url,form_data , function(output) {
+                                    var response = JSON.parse(output).data;
+                                    var response_code=response.code;
+                                   var response_message=response.message;
+                                   message=response_message;
+                                    if(response_code==1){
+                                        theme = "bg-success";
+                                        header = "Success";
+                                        message = response_message;
+                                        //reload data in table
+                                       load_users(); 
+                                    }
+                                    else{
+                                       theme = "bg-danger";
+                                        header = "Error";
+                                        message = response_message;   
+                                    }
+                                    
+                                    $.jGrowl('close');
+                                    
+                                  $.jGrowl(message, {
+                                        position: 'top-center',
+                                        header: header,
+                                        theme: theme
+                                   });  
+                                 });
+                             
+                         }
+                         else{
+                          $.jGrowl('Missing entry to be deleted', {
+                                        position: 'top-center',
+                                        header: 'Error',
+                                        theme: 'bg-danger'
+                                   });   
+                                   return false;
+                         }
+                }
             }
+            
         }
     });
     }

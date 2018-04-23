@@ -34,11 +34,11 @@ int code;
             dbConn conn = new dbConn();
             
              if(session.getAttribute("level")!=null){
-             if(request.getAttribute("level").toString().equals("1")){
+             if(session.getAttribute("level").toString().equals("1")){
             user_id = request.getParameter("user_id");
             status = request.getParameter("status");
             
-            String updator="UPDATE user set is_active=? WHERE id=?";
+            String updator="UPDATE user set status=? WHERE id=?";
             conn.pst = conn.conn.prepareStatement(updator);
             conn.pst.setString(1, status);
             conn.pst.setString(2, user_id);
@@ -46,7 +46,7 @@ int code;
             int num = conn.pst.executeUpdate();
             if(num>0){
                 code = 1;
-                message = "User active status updated successfully.";
+                message = "User status updated successfully.";
             }
             else{
                 code = 0;
@@ -54,6 +54,10 @@ int code;
             }
              
            }
+             else{
+                 code=0;
+                 message="Not allowed to undertake this action.";
+             }
              }else{
                  code=0;
                  message = "You are not allowed to undertake this operation";

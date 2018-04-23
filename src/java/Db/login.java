@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  */
 public class login extends HttpServlet {
 HttpSession session;
-String id,password,fullname,email,phone,pass,nextPage,message,timestamp;
+String id,password,fullname,email,phone,pass,nextPage,message,timestamp,gender;
 MessageDigest m;
 int status,level,code;
 
@@ -45,7 +45,7 @@ int status,level,code;
        //end of password encryption
        
        
-       String login = "SELECT id,fullname,email,phone,level,status,timestamp FROM user WHERE email=? and password=?";
+       String login = "SELECT id,fullname,email,phone,level,status,timestamp,gender FROM user WHERE email=? and password=?";
        conn.pst = conn.conn.prepareStatement(login);
        conn.pst.setString(1, email);
        conn.pst.setString(2, password);
@@ -59,6 +59,7 @@ int status,level,code;
         level = conn.rs.getInt(5);
         status = conn.rs.getInt(6);
         timestamp = conn.rs.getString(7);
+        gender = conn.rs.getString(8);
         
         
         session.setAttribute("id", id);
@@ -68,6 +69,7 @@ int status,level,code;
         session.setAttribute("level", level);
         session.setAttribute("status", status);
         session.setAttribute("timestamp", timestamp);
+        session.setAttribute("gender", gender);
         if(level == 1){
          nextPage =   "visits_filter.jsp"; 
         }
@@ -80,6 +82,7 @@ int status,level,code;
            code = 0;
            message = "login failed. Wrong email and password combination.";
            nextPage = "/ComplianceSystem";
+           session.setAttribute("message", message);
        }
         
         

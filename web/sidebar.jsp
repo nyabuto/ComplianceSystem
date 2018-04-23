@@ -21,12 +21,12 @@
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-                            <%if(session.getAttribute("fullname")!=null){
-                            if(session.getAttribute("fullname").toString().equals("f")){%>
+                            <%if(session.getAttribute("gender")!=null){
+                            if(session.getAttribute("gender").toString().equals("f")){%>
                             
                             <img src="images/female_user.png" class="img-responsive fa-user" alt="">
                             
-                            <%} else if(session.getAttribute("fullname").toString().equals("m")){%>
+                            <%} else if(session.getAttribute("gender").toString().equals("m")){%>
                             
                             <img src="images/male_user.png" class="img-responsive fa-user" alt="">
                             <%} 
@@ -89,7 +89,7 @@
 					
 				</ul>
 			</li>
-                       
+                       <li><a href="user_profile.jsp"><em class="fa fa-user-md">&nbsp;</em> User Profile</a></li>
 			<li><a href="logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->

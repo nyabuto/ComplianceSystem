@@ -17,6 +17,10 @@
 	<link href="css/styles.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Dancing+Script" />
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merienda+One" />
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/components.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        
 <style>
     .title{
         font-family: Merienda One;
@@ -79,5 +83,25 @@
 
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/notifications/jgrowl.min.js"></script>
+    
+    <%if(session.getAttribute("message")!=null){
+    String message = session.getAttribute("message").toString();
+    String theme="bg-danger";
+   
+    %>
+     <script type="text/javascript">
+     $.jGrowl('<%=message%>', {
+        position: 'top-center',
+        header: 'ERROR',
+        theme: '<%=theme%>'
+     });
+    </script>
+    <% 
+        session.removeAttribute("message");
+        }
+    %>
+
+    
 </body>
 </html>

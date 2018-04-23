@@ -32,7 +32,8 @@ public class delete_user extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
            session = request.getSession();
             dbConn conn = new dbConn();
-            
+              if(session.getAttribute("level")!=null){
+             if(session.getAttribute("level").toString().equals("1")){
             user_id = request.getParameter("user_id");
             String checker = "SELECT id FROM visit WHERE user_id=?";
             conn.pst = conn.conn.prepareStatement(checker);
@@ -57,7 +58,15 @@ public class delete_user extends HttpServlet {
                     message = "No changes detected";
                 }
             }
-            
+             }
+             else{
+                 code=0;
+                 message="Not allowed to undertake this action.";
+             }
+             }else{
+                 code=0;
+                 message = "You are not allowed to undertake this operation";
+             }
             
             JSONObject finalobj = new JSONObject();
             JSONObject obj = new JSONObject();

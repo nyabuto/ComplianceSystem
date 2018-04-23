@@ -34,7 +34,7 @@ int code=0;
           dbConn conn = new dbConn();
           
           if(session.getAttribute("id")!=null){
-              user_id = request.getAttribute("id").toString();
+              user_id = session.getAttribute("id").toString();
               
              String getdetails = "SELECT fullname,email,phone,gender FROM user WHERE id=?";
              conn.pst = conn.conn.prepareStatement(getdetails);

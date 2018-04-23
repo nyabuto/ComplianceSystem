@@ -128,6 +128,46 @@
         <servlet-name>load_al_counties</servlet-name>
         <servlet-class>Loaders.load_al_counties</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>save_partner</servlet-name>
+        <servlet-class>Compliance.save_partner</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>update_partner</servlet-name>
+        <servlet-class>Compliance.update_partner</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>delete_partner</servlet-name>
+        <servlet-class>Compliance.delete_partner</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_ind_partner</servlet-name>
+        <servlet-class>Loaders.load_ind_partner</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_partner_county</servlet-name>
+        <servlet-class>Loaders.load_partner_county</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_currency</servlet-name>
+        <servlet-class>Loaders.load_currency</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>update_user</servlet-name>
+        <servlet-class>Compliance.update_user</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>delete_user</servlet-name>
+        <servlet-class>Compliance.delete_user</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>load_profile</servlet-name>
+        <servlet-class>Loaders.load_profile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>user_status</servlet-name>
+        <servlet-class>Compliance.user_status</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dbsetup</servlet-name>
         <url-pattern>/dbsetup</url-pattern>
@@ -255,6 +295,46 @@
     <servlet-mapping>
         <servlet-name>load_al_counties</servlet-name>
         <url-pattern>/load_al_counties</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>save_partner</servlet-name>
+        <url-pattern>/save_partner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>update_partner</servlet-name>
+        <url-pattern>/update_partner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>delete_partner</servlet-name>
+        <url-pattern>/delete_partner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_ind_partner</servlet-name>
+        <url-pattern>/load_ind_partner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_partner_county</servlet-name>
+        <url-pattern>/load_partner_county</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_currency</servlet-name>
+        <url-pattern>/load_currency</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>update_user</servlet-name>
+        <url-pattern>/update_user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>delete_user</servlet-name>
+        <url-pattern>/delete_user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>load_profile</servlet-name>
+        <url-pattern>/load_profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>user_status</servlet-name>
+        <url-pattern>/user_status</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

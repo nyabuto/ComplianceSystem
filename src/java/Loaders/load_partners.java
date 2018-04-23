@@ -28,6 +28,7 @@ HttpSession session;
 String is_selected;
 String project;
 String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,currency,project_monitor,finance_monitor,is_active,project_name;
+String counties;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
@@ -38,7 +39,10 @@ String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,curre
             JSONObject finalobj = new JSONObject();
             JSONArray jarray = new JSONArray();
             
-            project = "";
+            project = counties= "";
+            if(request.getParameter("source")!=null){   
+            }
+            else{
             if(request.getParameter("project_id")!=null){
              project = request.getParameter("project_id");   
             }
@@ -48,10 +52,19 @@ String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,curre
                     }
             }
             System.out.println("project id : "+project);
+            }
+            String getprojects = "";
             if(!project.equals("")){
-            String getprojects = "SELECT partner.id AS id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,currency,project_monitor,finance_monitor,partner.is_active AS is_active,project.name AS project_name FROM partner LEFT JOIN project ON partner.project_id=project.id where project_id=? order by project_name,lip_name ASC";
+            getprojects = "SELECT partner.id AS id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,currency,project_monitor,finance_monitor,partner.is_active AS is_active,project.name AS project_name FROM partner LEFT JOIN project ON partner.project_id=project.id where project_id=? order by project_name,lip_name ASC";
             conn.pst = conn.conn.prepareStatement(getprojects);
             conn.pst.setString(1, project);
+            
+            }
+            else{
+            getprojects = "SELECT partner.id AS id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,currency,project_monitor,finance_monitor,partner.is_active AS is_active,project.name AS project_name FROM partner LEFT JOIN project ON partner.project_id=project.id order by project_name,lip_name ASC";
+            conn.pst = conn.conn.prepareStatement(getprojects);
+            }
+            
             conn.rs = conn.pst.executeQuery();
             while(conn.rs.next()){
            
@@ -69,6 +82,23 @@ String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,curre
              is_active = conn.rs.getString("is_active");
              project_name = conn.rs.getString("project_name");
               
+             //counties of operation
+            //get operating counties
+             counties="";
+              String getc = "SELECT county FROM partner_county LEFT JOIN county ON partner_county.county_id=county.id WHERE partner_id=?";
+              conn.pst1 = conn.conn.prepareStatement(getc);
+              conn.pst1.setString(1, id);
+              conn.rs1 = conn.pst1.executeQuery();
+              while(conn.rs1.next()){
+                  counties+=conn.rs1.getString(1)+", ";
+              }
+              
+              if(!counties.equals("")){
+              counties = removeLast(counties, 2);
+              }
+             
+             //end
+             
               if(session.getAttribute("partner_id")!=null){
                   if(session.getAttribute("partner_id").toString().equals(id)){
                       is_selected = "selected";
@@ -94,13 +124,11 @@ String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,curre
               obj.put("finance_monitor", finance_monitor);
               obj.put("project_name", project_name);
               obj.put("is_active", is_active);
+              obj.put("counties", counties);
               
               jarray.add(obj);
             }
-            }
-            else{
-                
-            }
+            
             finalobj.put("data", jarray);
             out.println(finalobj);
         }
@@ -154,4 +182,10 @@ String id,id_code,fco,lip_name,project_id,start_date,end_date,total_budget,curre
         return "Short description";
     }// </editor-fold>
 
+     public String removeLast(String str, int num) {
+    if (str != null && str.length() > 0) {
+        str = str.substring(0, str.length() - num);
+    }
+    return str;
+    }
 }

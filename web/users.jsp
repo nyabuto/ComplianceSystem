@@ -13,7 +13,7 @@
 	<title>Users</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
-	<!--<link href="css/datepicker3.css" rel="stylesheet">-->
+	<link href="css/datepicker3.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet">
         <link href="dataTables/datatables.css" rel="stylesheet">
         <!--<link href="dataTables/Buttons-1.5.1/css/buttons.dataTables.min.css" rel="stylesheet">-->
@@ -143,9 +143,9 @@
                  gender_label = '<span class="">No Gender</span> '; 
             }
             var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu">';
-                output+='<li><button class="btn btn-link" onclick=\"edit('+position+');\" ><i class="position-left"></i> Edit</button></li>';
-                output+='<li><button class="btn btn-link" onclick=\"deleter('+position+');\" ><i class="position-left"></i> Delete</button></li>';
+                output+='<li><button class="btn btn-link" onclick=\"remove_entry('+position+');\" ><i class="position-left"></i> Remove User</button></li>';
                 output+='<input type="hidden" name="'+position+'" value="'+id+'" id="_'+position+'">';
+                output+='<input type="hidden" name="'+position+'" value="'+status+'" id="status_'+position+'">';
                 output+='</ul></div>';
                 
             var minSet = [position,fullname,email,phone,gender_label,level_label,status_label,output];
@@ -325,6 +325,83 @@
             }
         }
     }
+    });
+    }
+    
+    
+    
+    
+    function remove_entry(pos){
+                   var id = $("#_"+pos).val();   
+                   var status = $("#status_"+pos).val();  
+                   var status_label="";
+                   if(status==1){
+                    status_label="De-activate Instead" ;  
+                   }
+                   else if(status==0){
+                    status_label="Activate Instead" ;  
+                   }
+       var dialog = bootbox.dialog({
+        title: "<b  style='text-align:center;'>Delete/Deactivate User<b>",
+        message: "Are you sure you want to delete this partner?",
+        buttons: {
+            ok: {
+                label: '<i class="fa fa-check"></i> Yes',
+                className: 'btn-success'
+            },
+            activate: {
+                label: '<i class="fa fa-check"></i> '+status_label,
+                className: 'btn-warning'
+            },
+            cancel: {
+                label: '<i class="fa fa-times"></i> No ',
+                className: 'btn-danger'
+            }
+        },
+        callback: function (result) {
+            if(result){
+                if(id!=""){
+                var form_data = {"partner_id":id};
+                var theme="",header="",message="";
+                var url = "delete_partner";
+                   $.post(url,form_data , function(output) {
+                                    var response = JSON.parse(output).data;
+                                    var response_code=response.code;
+                                   var response_message=response.message;
+                                   message=response_message;
+                                    if(response_code==1){
+                                        theme = "bg-success";
+                                        header = "Success";
+                                        message = response_message;
+                                        //reload data in table
+                                       load_partners(); 
+                                    }
+                                    else{
+                                       theme = "bg-danger";
+                                        header = "Error";
+                                        message = response_message;   
+                                    }
+                                    
+                                    $.jGrowl('close');
+                                    
+                                  $.jGrowl(message, {
+                                        position: 'top-center',
+                                        header: header,
+                                        theme: theme
+                                   });  
+                                 });
+                             
+                         }
+                         else{
+                          $.jGrowl('Missing entry to be deleted', {
+                                        position: 'top-center',
+                                        header: 'Error',
+                                        theme: 'bg-danger'
+                                   });   
+                                   return false;
+                         }   
+            }
+        }
     });
     }
     </script>

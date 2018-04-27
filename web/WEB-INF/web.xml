@@ -168,6 +168,10 @@
         <servlet-name>user_status</servlet-name>
         <servlet-class>Compliance.user_status</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>visit_report</servlet-name>
+        <servlet-class>Reports.visit_report</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dbsetup</servlet-name>
         <url-pattern>/dbsetup</url-pattern>
@@ -335,6 +339,10 @@
     <servlet-mapping>
         <servlet-name>user_status</servlet-name>
         <url-pattern>/user_status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>visit_report</servlet-name>
+        <url-pattern>/visit_report</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

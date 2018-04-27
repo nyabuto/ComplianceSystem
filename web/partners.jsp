@@ -91,10 +91,11 @@
         <script src="dataTables/Buttons-1.5.1/js/buttons.html5.min.js"></script>
         <script src="dataTables/Buttons-1.5.1/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/notifications/jgrowl.min.js"></script>
+        <script type="text/javascript" src="js/select2.min.js"></script>
         
 	<script>
    $(document).ready(function() {
-   
+   $("#county").select2();
 }); 
     </script>
     
@@ -183,7 +184,7 @@
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Project <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="project" required name="project" onchange=\"load_counties(0);\" class="mdb-select colorful-select dropdown-primary" searchable="Search county.." required style="width:80%;min-height:4%">'+
                                     '</select>' +
                                 '</div>' +
@@ -192,7 +193,7 @@
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="county" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required style="width:80%;">'+
                                     '</select>' +
                                 '</div>' +
@@ -239,7 +240,7 @@
                             
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Currency <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="currency" required name="currency" class="mdb-select colorful-select dropdown-primary" searchable="Search currency.." required style="width:80%;min-height:4%">'+
                                     '</select>' +
                                 '</div>' +
@@ -381,6 +382,7 @@
         }
         }
         $("#project").html(output);
+        $("#project").select2();
     }
 });   
     }
@@ -406,6 +408,7 @@
         }
         }
         $("#currency").html(output);
+        $("#currency").select2();
     }
 });   
     }
@@ -437,9 +440,11 @@
         }
         if(num==0){
         $("#county").html(output);
+        $("#county").select2();
         }
         else if(num==1){
             $("#county_edit").html(output); 
+            $("#county_edit").select2(); 
         }
     }
 });
@@ -550,13 +555,16 @@ function changed(){
 
          $("#partner_edit").val(lip_name);
          $("#project_edit").html(project);
+         $("#project_edit").select2();
          $("#county_edit").html(counties);
+         $("#county_edit").select2();
          $("#id_code_edit").val(id_code);
          $("#fco_edit").val(fco);
          $("#start_date_edit").val(start_date);
          $("#end_date_edit").val(end_date);
          $("#budget_edit").val(total_budget);
          $("#currency_edit").html(currency);
+         $("#currency_edit").select2();
          $("#project_monitor_edit").val(project_monitor);
          $("#finance_monitor_edit").val(finance_monitor);
 
@@ -574,7 +582,7 @@ function changed(){
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Project <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="project_edit" required name="project" onchange=\"load_counties(1);\" class="mdb-select colorful-select dropdown-primary" searchable="Search county.." required style="width:80%;min-height:4%">'+
                                     '</select>' +
                                 '</div>' +
@@ -583,7 +591,7 @@ function changed(){
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="county_edit" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required style="width:80%;">'+
                                     '</select>' +
                                 '</div>' +
@@ -630,7 +638,7 @@ function changed(){
                             
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Currency <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
+                                '<div class="col-md-8"  style=\"border-style: solid; border-width: 0.2px; width:52%\">' +
                                     '<select id="currency_edit" required name="currency" class="mdb-select colorful-select dropdown-primary" searchable="Search currency.." required style="width:80%;min-height:4%">'+
                                     '</select>' +
                                 '</div>' +

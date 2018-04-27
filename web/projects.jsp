@@ -83,6 +83,7 @@
         <script src="dataTables/Buttons-1.5.1/js/buttons.html5.min.js"></script>
         <script src="dataTables/Buttons-1.5.1/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/notifications/jgrowl.min.js"></script>
+         <script type="text/javascript" src="js/select2.min.js"></script>
         
 	<script>
    $(document).ready(function() {
@@ -166,8 +167,8 @@
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
-                                    '<select id="county" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required multiple style="width:80%;">'+
+                                '<div class="col-md-8" style=\"border-style: solid; border-width: 0.2px;\">' +
+                                    '<select id="county" required name="county" class="" multiple style="width:70% !important; margin-right:20% !important; ">'+
                                     '</select>' +
                                 '</div>' +
                             '</div>' +
@@ -268,6 +269,7 @@
             output+="<option value='"+id+"'>"+county+"</option>";
         }
         $("#county").html(output);
+        $("#county").select2();
     }
 });
 }
@@ -349,6 +351,7 @@
          // ouput
          $("#project_edit").val(project);
          $("#county_edit").html(counties);
+         $("#county_edit").select2();
         }
   });   
     }
@@ -356,15 +359,15 @@
     function edit_area(pos){
      var id = $("#_"+pos).val();        
             var dialog = bootbox.dialog({
-    title: '<b>New Observation</b>',
+    title: '<b>Edit Observation</b>',
     message: '<div class="row">' +
                     '<div class="col-md-12">' +
                         '<form id="edit_project" method="post" class="form-horizontal">' +
                            
                     '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Counties <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
-                                    '<select id="county_edit" required name="county" class="mdb-select colorful-select dropdown-primary" multiple searchable="Search county.." required multiple style="width:80%;">'+
+                                '<div class="col-md-8" style=\"border-style: solid; border-width: 0.2px;\">' +
+                                    '<select id="county_edit" required name="county" class="" multiple required multiple style="width:80%;">'+
                                     '</select>' +
                                 '</div>' +
                             '</div>' +

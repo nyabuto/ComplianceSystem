@@ -56,10 +56,10 @@
          <th> Officer phone </th>
          <th> Officer Email </th>
          <th> Project Name </th>
-         <th>LIP Name</th>
+         <th> LIP Name </th>
          <th> Visit Date </th>
-         <th> Review Start Date </th>
-         <th> Review End Date </th>
+         <th> Review Period Start Date </th>
+         <th> Review Period End Date </th>
          <th> Action</th>
         </tr>
         </thead>
@@ -239,7 +239,7 @@ function visit_changed_edit(){
                             
                             
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Start Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Review Period Start Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_start_date" required name="review_start_date" onChange="changed();" type="text" value="" placeholder="Enter Review Start Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -247,7 +247,7 @@ function visit_changed_edit(){
                             
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Review Period End Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_end_date" required name="review_end_date" type="text" value="" placeholder="Enter Review End Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -368,7 +368,7 @@ function visit_changed_edit(){
                             
                             
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Start Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Review Period Start Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_start_date_edit" required name="review_start_date" onChange="changed_edit();" type="text" value="" placeholder="Enter Review Start Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -376,7 +376,7 @@ function visit_changed_edit(){
                             
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Review Period End Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_end_date_edit" required name="review_end_date" type="text" value="" placeholder="Enter Review End Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +

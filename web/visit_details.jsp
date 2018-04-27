@@ -56,7 +56,7 @@
          <th> Area of Observation</th>
          <th> Observation</th>
          <th> Implication </th>
-         <th> Control Measure</th>
+         <th> Requisite Measure</th>
          <th>Recommendation</th>
          <th>Responsibility, Timeline &<br>Implementation Status</th>
          <th> Action</th>
@@ -90,6 +90,7 @@
         <script src="dataTables/Buttons-1.5.1/js/buttons.html5.min.js"></script>
         <script src="dataTables/Buttons-1.5.1/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/notifications/jgrowl.min.js"></script>
+        <script type="text/javascript" src="js/select2.min.js"></script>
         
 	<script>
    $(document).ready(function() {
@@ -229,8 +230,8 @@ function visit_changed(){
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Area of Observation <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
-                                    '<select id="area" required name="area" class="form-control" required  style="width:80%;">'+
+                                '<div class="col-md-8" style=\"border-style: solid; border-width: 0.2px;\">' +
+                                    '<select id="area" required name="area" class="form-control" required  style="width:50%;">'+
                                     '<option value="">Select an Area</option>'+
                                     '</select>' +
                                 '</div>' +
@@ -313,6 +314,7 @@ function visit_changed(){
     });
     
     load_areas();
+    $("#area").select2();
     }
     
     function delete_entry(pos){
@@ -392,6 +394,7 @@ function visit_changed(){
              if( data.observation!=null){observation = data.observation;}
          // ouput
          $("#area_edit").html(areas);
+         $("#area_edit").select2();
          $("#observation_edit").val(observation);
         }
   });   
@@ -407,8 +410,8 @@ function visit_changed(){
                            
                              '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Area of Observation <b style=\"color:red\">*</b> : </label>' +
-                                '<div class="col-md-8">' +
-                                    '<select id="area_edit" required name="area" class="form-control" required  style="width:80%;">'+
+                                '<div class="col-md-8" style=\"border-style: solid; border-width: 0.2px;\">' +
+                                    '<select id="area_edit" required name="area" class="form-control" required  style="width:50%;">'+
                                     '<option value="">Select an Area</option>'+
                                     '</select>' +
                                 '</div>' +
@@ -555,7 +558,7 @@ function visit_changed(){
                            
                             
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Control Measure <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Requisite Measure <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<textarea id="control_measure" required name="control_measure" type="text" value="" placeholder="Enter control measure" class="form-control"  style="width:80%;"></textarea>' +
                                 '</div>' +

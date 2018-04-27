@@ -22,7 +22,11 @@
         <link href="css/components.css" rel="stylesheet" type="text/css">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-       
+       <style>
+           select{
+               height:120px;
+           }
+           </style>
 </head>
 <body>
     <div class="topmenu"><!--  start of top menu here --->
@@ -52,8 +56,8 @@
                             
            <div class="form-group"> 
             <label class="col-md-4 control-label">Project <b style="color:red">*</b> : </label> 
-            <div class="col-md-8"> 
-                <select id="project" required name="project" class="form-control" required  style="width:80%; height: 6%;">
+            <div class="col-md-8" style="border-style: solid; border-width: 0.2px;"> 
+                <select id="project" required name="project" class="form-control" required style="width:60%; height: 6%;">
                  <option value =''>Choose Project</option>
                 </select> 
             </div> 
@@ -61,8 +65,8 @@
                 
            <div class="form-group"> 
             <label class="col-md-4 control-label">Implementing Partner <b style="color:red">*</b> : </label> 
-            <div class="col-md-8"> 
-                <select id="partner" required name="partner" class="form-control" required  style="width:80%; height: 6%;">
+            <div class="col-md-8"  style="border-style: solid; border-width: 0.2px;"> 
+                <select id="partner" required name="partner" class="form-control" required  style="width:60%; height: 6%;">
                     <option value =''>Choose Implementing Partner</option>
                 </select> 
             </div> 
@@ -70,8 +74,8 @@
                 
            <div class="form-group"> 
             <label class="col-md-4 control-label">Obligation <b style="color:red">*</b> : </label> 
-            <div class="col-md-8"> 
-                <select id="obligation" required name="obligation" class="form-control" required  style="width:80%; height: 6%;">
+            <div class="col-md-8"  style="border-style: solid; border-width: 0.2px;"> 
+                <select id="obligation" required name="obligation" class="form-control" required  style="width:60%; height: 6%;">
                     <option value =''>Choose Obligation</option>
                 </select> 
             </div> 
@@ -113,6 +117,7 @@
         <script src="dataTables/Buttons-1.5.1/js/buttons.html5.min.js"></script>
         <script src="dataTables/Buttons-1.5.1/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/notifications/jgrowl.min.js"></script>
+        <script type="text/javascript" src="js/select2.min.js"></script>
         
 	<script>
    $(document).ready(function() {
@@ -122,6 +127,9 @@
        $("#partner").change(function(){
         load_obligations();   
        });
+        $("#partner").select2();
+        $("#obligation").select2();
+       
 } ); 
     </script>
     
@@ -153,6 +161,7 @@
          }
          // ouput
          $("#project").html(output);
+         $("#project").select2();
         }
   });
   }
@@ -183,6 +192,7 @@
          }
          // ouput
          $("#partner").html(output);
+         $("#partner").select2();
         }
   });   
   }
@@ -211,6 +221,7 @@
          }
          // ouput
          $("#obligation").html(output);
+         $("#obligation").select2();
         }
   });  
   }

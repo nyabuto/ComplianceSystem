@@ -172,6 +172,10 @@
         <servlet-name>visit_report</servlet-name>
         <servlet-class>Reports.visit_report</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>review_details</servlet-name>
+        <servlet-class>Loaders.review_details</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dbsetup</servlet-name>
         <url-pattern>/dbsetup</url-pattern>
@@ -343,6 +347,10 @@
     <servlet-mapping>
         <servlet-name>visit_report</servlet-name>
         <url-pattern>/visit_report</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>review_details</servlet-name>
+        <url-pattern>/review_details</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

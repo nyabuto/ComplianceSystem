@@ -80,7 +80,7 @@
 				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-2">
-					<li><a class="" href="visit_reports">
+					<li><a class="" href="reports_filter.jsp">
 						<span class="fa fa-area-chart">&nbsp;</span> Visit Reports
 					</a></li>
 					<li><a class="" href="partners_report">

@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
  */
 public class load_ind_visit extends HttpServlet {
 HttpSession session;
-String visit_id,visit_date,review_start_date,review_end_date;
+String visit_id,visit_start_date,visit_end_date,review_start_date,review_end_date;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
@@ -35,20 +35,22 @@ String visit_id,visit_date,review_start_date,review_end_date;
            
            visit_id = request.getParameter("visit_id");
            
-           String getdetails = "SELECT date,review_start_date,review_end_date FROM visit WHERE id=?";
+           String getdetails = "SELECT visit_start_date,review_start_date,review_end_date,visit_end_date FROM visit WHERE id=?";
            conn.pst = conn.conn.prepareStatement(getdetails);
            conn.pst.setString(1, visit_id);
            
            conn.rs = conn.pst.executeQuery();
            if(conn.rs.next()){
-               visit_date = conn.rs.getString(1);
+               visit_start_date = conn.rs.getString(1);
                review_start_date = conn.rs.getString(2);
                review_end_date = conn.rs.getString(3);
+               visit_end_date = conn.rs.getString(4);
            }
              JSONObject obj = new JSONObject();
-             obj.put("visit_date", visit_date);
+             obj.put("visit_start_date", visit_start_date);
              obj.put("review_start_date", review_start_date);
              obj.put("review_end_date", review_end_date);
+             obj.put("visit_end_date", visit_end_date);
            
              JSONObject finalobj = new JSONObject();
           

@@ -23,64 +23,49 @@ import org.json.simple.JSONObject;
  *
  * @author GNyabuto
  */
-public class load_visits extends HttpServlet {
+public class review_details extends HttpServlet {
 HttpSession session;
-String obligation_id;
-String id,fullname,email,phone,lip_name,project_name,review_start_date,review_end_date,visit_start_date,visit_end_date;
+String partner_id;
+int no_observation;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           session = request.getSession();
-           dbConn conn = new dbConn();
-           
-           
+            session = request.getSession();
+            dbConn conn = new dbConn();
+            
             JSONObject finalobj = new JSONObject();
             JSONArray jarray = new JSONArray();
-            System.out.println("was here");
-            if(session.getAttribute("obligation_id")!=null){
-            obligation_id = session.getAttribute("obligation_id").toString();
-                System.out.println("obligation id : "+obligation_id);
-            String getvisits = "SELECT visit.id AS id,user.fullname AS fullname,user.email AS email,user.phone AS phone,lip_name,name,review_start_date,"
-                    + "review_end_date,visit_start_date AS visit_start_date,visit_end_date AS visit_end_date "
-                    + "FROM visit LEFT JOIN obligation ON visit.obligation_id=obligation.id LEFT JOIN partner ON obligation.partner_id=partner.id "
-                    + "LEFT JOIN project ON partner.project_id=project.id "
-                    + "LEFT JOIN user ON visit.user_id=user.id WHERE obligation_id=? ORDER BY visit.timestamp DESC";
-            conn.pst = conn.conn.prepareStatement(getvisits);
-            conn.pst.setString(1, obligation_id);
             
+            
+            partner_id = request.getParameter("partner_id");
+            
+            no_observation=0;
+            String getdetails = "SELECT count(visit_details.id) AS no_observations,visit.id AS id, review_start_date,review_end_date,visit_start_date,visit_end_date,"+
+                        "fullname,email,phone,obligation.end_date AS obligation_end_date " +
+                        "FROM visit LEFT JOIN user ON visit.user_id=user.id " +
+                        "LEFT JOIN obligation ON visit.obligation_id=obligation.id " +
+                        "LEFT JOIN partner ON obligation.partner_id=partner.id " +
+                        "LEFT JOIN visit_details ON visit_details.visit_id=visit.id " +
+                        "WHERE partner_id=? GROUP BY id";
+            conn.pst = conn.conn.prepareStatement(getdetails);
+            conn.pst.setString(1, partner_id);
             conn.rs = conn.pst.executeQuery();
             while(conn.rs.next()){
-                id = conn.rs.getString(1);
-                fullname = conn.rs.getString(2);
-                email = conn.rs.getString(3);
-                phone = conn.rs.getString(4);
-                lip_name = conn.rs.getString(5);
-                project_name = conn.rs.getString(6);
-                review_start_date = conn.rs.getString(7);
-                review_end_date = conn.rs.getString(8);
-                visit_start_date = conn.rs.getString(9);
-                visit_end_date = conn.rs.getString(10);
-                
-                
                 JSONObject obj = new JSONObject();
-                obj.put("id", id);
-                obj.put("fullname", fullname);
-                obj.put("email", email);
-                obj.put("phone", phone);
-                obj.put("lip_name", lip_name);
-                obj.put("project_name", project_name);
-                obj.put("review_start_date", review_start_date);
-                obj.put("review_end_date", review_end_date);
-                obj.put("visit_end_date", visit_end_date);
-                obj.put("visit_start_date", visit_start_date);
-                
+                if(conn.rs.getInt("no_observations")>0){
+                obj.put("id", conn.rs.getString("id"));
+                obj.put("review_start_date",  conn.rs.getString("review_start_date"));
+                obj.put("review_end_date",  conn.rs.getString("review_end_date"));
+                obj.put("visit_start_date",  conn.rs.getString("visit_start_date"));
+                obj.put("visit_end_date",  conn.rs.getString("visit_end_date"));
+                obj.put("fullname",  conn.rs.getString("fullname"));
+                obj.put("email",  conn.rs.getString("email"));
+                obj.put("phone",  conn.rs.getString("phone"));
+                obj.put("obligation_end_date",  conn.rs.getString("obligation_end_date"));
+                obj.put("no_observations", conn.rs.getString("no_observations"));
                 jarray.add(obj);
-            }
-            
-            }
-            else{
-                
+                }
             }
             
             finalobj.put("data", jarray);
@@ -103,7 +88,7 @@ String id,fullname,email,phone,lip_name,project_name,review_start_date,review_en
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_visits.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(review_details.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -121,7 +106,7 @@ String id,fullname,email,phone,lip_name,project_name,review_start_date,review_en
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
-        Logger.getLogger(load_visits.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(review_details.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 

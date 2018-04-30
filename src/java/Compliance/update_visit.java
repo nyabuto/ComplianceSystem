@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
  */
 public class update_visit extends HttpServlet {
 HttpSession session;
-String visit_id,visit_date,review_start_date,review_end_date;
+String visit_id,visit_start_date,review_start_date,review_end_date,visit_end_date;
 String message;
 int code;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -35,19 +35,21 @@ int code;
             dbConn conn = new dbConn();
             
             visit_id = request.getParameter("visit_id");
-            visit_date = request.getParameter("visit_date");
+            visit_start_date = request.getParameter("visit_start_date");
+            visit_end_date = request.getParameter("visit_end_date");
             review_start_date = request.getParameter("review_start_date");
             review_end_date = request.getParameter("review_end_date");
             code=0;
             message = "";
             
-            if(!visit_id.equals("") && !visit_date.equals("") && !review_start_date.equals("") && !review_end_date.equals("")){
-            String updator = "UPDATE visit SET date=?,review_start_date=?,review_end_date=? WHERE id=?";
+            if(!visit_id.equals("") && !visit_start_date.equals("") && !visit_end_date.equals("")  && !review_start_date.equals("") && !review_end_date.equals("")){
+            String updator = "UPDATE visit SET visit_start_date=?,review_start_date=?,review_end_date=?,visit_end_date=? WHERE id=?";
             conn.pst = conn.conn.prepareStatement(updator);
-            conn.pst.setString(1, visit_date);
+            conn.pst.setString(1, visit_start_date);
             conn.pst.setString(2, review_start_date);
             conn.pst.setString(3, review_end_date);
-            conn.pst.setString(4, visit_id);
+            conn.pst.setString(4, visit_end_date);
+            conn.pst.setString(5, visit_id);
             
             int num = conn.pst.executeUpdate();
             if(num>0){

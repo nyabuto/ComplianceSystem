@@ -1,6 +1,6 @@
 <%-- 
-    Document   : visits_filter
-    Created on : Apr 17, 2018, 2:30:14 PM
+    Document   : reports_filter
+    Created on : Apr 30, 2018, 10:57:05 AM
     Author     : GNyabuto
 --%>
 
@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="images/hsdsa/icon.png" style="height: 20px;padding: 0px; margin: 0px;"/>
-	<title>Visits Filter</title>
+	<title>Visit Report</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<!--<link href="css/datepicker3.css" rel="stylesheet">-->
@@ -44,7 +44,7 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				 <li class="active"><a href="visits_filter.jsp">Visits Filter</a></li>
+				 <li class="active"><a href="visits_filter.jsp">Visit Report</a></li>
 			</ol>
 		</div><!--/.row-->
                 <br>
@@ -52,7 +52,7 @@
               
                 <div class="row">
                     <div class="col-lg-10">
-                        <form id="" method="post" action="visit_sess" class="form-horizontal">
+                        <form id="" method="post" action="visit_report" class="form-horizontal">
                             
            <div class="form-group"> 
             <label class="col-md-4 control-label">Project <b style="color:red">*</b> : </label> 
@@ -73,17 +73,17 @@
         </div>
                 
            <div class="form-group"> 
-            <label class="col-md-4 control-label">Obligation <b style="color:red">*</b> : </label> 
+            <label class="col-md-4 control-label">Review Period <b style="color:red">*</b> : </label> 
             <div class="col-md-8"  style="border-style: solid; border-width: 0.2px;"> 
-                <select id="obligation" required name="obligation" class="form-control" required  style="width:60%; height: 6%;">
-                    <option value =''>Choose Obligation</option>
+                <select id="visit_id" required name="visit_id" class="form-control" required  style="width:60%; height: 6%;">
+                    <option value =''>Choose Period</option>
                 </select> 
             </div> 
         </div>
                             
            <div class="form-group">  
             <div class="col-md-8"> 
-                <input type="submit" required value="Next" class="form-control btn btn-group-lg btn-primary" required  style="margin-left:60%; width: 20%; height: 6%;">
+                <input type="submit" required value="Generate Report" class="form-control btn btn-group-lg btn-primary" required  style="margin-left:60%; width: 20%; height: 6%;">
             </div> 
         </div>
            
@@ -125,10 +125,10 @@
         load_partners();   
        });
        $("#partner").change(function(){
-        load_obligations();   
+        load_visits();   
        });
         $("#partner").select2();
-        $("#obligation").select2();
+        $("#visit_id").select2();
        
 } ); 
     </script>
@@ -197,31 +197,36 @@
   });   
   }
   
-  function load_obligations(){
+  function load_visits(){
       var partner_id = $("#partner").val();
            $.ajax({
-        url:'load_obligations?partner_id='+partner_id,
+        url:'review_details?partner_id='+partner_id,
         type:"post",
         dataType:"json",
         success:function(raw_data){
-         var id,is_active,is_selected,end_date;
+         var id,review_start_date,review_end_date,visit_start_date,visit_end_date,fullname,email,phone,obligation_end_date,no_observations;
          var data = raw_data.data;
          var output="";
-         output += "<option value =''>Choose Obligation</option>"; 
+         output += "<option value =''>Choose Review Period</option>"; 
          for(var i=0;i<data.length;i++){
-            id=end_date=is_active=is_selected="";
+            id=review_start_date=review_end_date=visit_start_date=visit_end_date=fullname=email=phone=obligation_end_date=no_observations="";
              if( data[i].id!=null){id = data[i].id;}
-             if( data[i].is_active!=null){is_active = data[i].is_active;}
-             if( data[i].is_selected!=null){is_selected = data[i].is_selected;}
-             if( data[i].end_date!=null){end_date = data[i].end_date;}
+             if( data[i].review_start_date!=null){review_start_date = data[i].review_start_date;}
+             if( data[i].review_end_date!=null){review_end_date = data[i].review_end_date;}
+             if( data[i].visit_start_date!=null){visit_start_date = data[i].visit_start_date;}
+             if( data[i].visit_end_date!=null){visit_end_date = data[i].visit_end_date;}
+             if( data[i].fullname!=null){fullname = data[i].fullname;}
+             if( data[i].email!=null){email = data[i].email;}
+             if( data[i].phone!=null){phone = data[i].phone;}
+             if( data[i].obligation_end_date!=null){obligation_end_date = data[i].obligation_end_date;}
+             if( data[i].no_observations!=null){no_observations = data[i].no_observations;}
              
-             if(is_active==1){
-              output += "<option value ="+id+" "+is_selected+">ends at "+end_date+"</option>";   
-             }
+              output += "<option value ="+id+">"+review_start_date+" to "+review_end_date+" ["+no_observations+" Observations]</option>";   
+            
          }
          // ouput
-         $("#obligation").html(output);
-         $("#obligation").select2();
+         $("#visit_id").html(output);
+         $("#visit_id").select2();
         }
   });  
   }

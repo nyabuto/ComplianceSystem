@@ -7,8 +7,10 @@ package Reports;
 
 import Db.dbConn;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,15 +19,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.BreakType;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFStyle;
+import org.apache.poi.xwpf.usermodel.XWPFStyles;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.xmlbeans.XmlException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTFldChar;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 /**
  *
  * @author GNyabuto
@@ -33,22 +50,26 @@ import org.json.simple.JSONObject;
 public class visit_report extends HttpServlet {
 HttpSession session;
 String visit_id;
-String id,visit_date,review_start_date,review_end_date,area_of_observation,observation,implication,control_measure,recommendation,responsibility,timeline,implementation_status,timestamp;
+String id,visit_start_date,visit_end_date,review_start_date,review_end_date,area_of_observation,observation,implication,control_measure,recommendation,responsibility,timeline,implementation_status,timestamp;
 String fullname,email,phone,local_currency,us_dollar,obligation_end_date,id_code,fco,partner_name,start_date,end_date,total_budget,currency,project_monitor,finance_monitor,project_name;
 String counties;
 int new_,areas_counter,observations_counter;
 protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, XmlException {
         response.setContentType("text/html;charset=UTF-8");
            session = request.getSession();
            dbConn conn = new dbConn();
            JSONArray jarray = new JSONArray();
             //Blank Document
-        XWPFDocument document = new XWPFDocument(); 
+        XWPFDocument document = new XWPFDocument();
+        String allpath = getServletContext().getRealPath("/template.docx");
+        XWPFDocument documentstyle = new XWPFDocument(new FileInputStream(allpath));
            
-        
-//        visit_id = request.getParameter("visit_id");
-        visit_id="1";
+        XWPFStyles newStyles = document.createStyles();
+        newStyles.setStyles(documentstyle.getStyle());
+
+        visit_id = request.getParameter("visit_id");
+//        visit_id="1";
         counties = "";
         areas_counter=observations_counter=0;
         String get_basic_info = "SELECT visit.id AS visit_id, user.fullname AS fullname,user.email AS email, user.phone AS phone, "
@@ -137,7 +158,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
          run2.addCarriageReturn();
          
         
-        String get_details = "SELECT IFNULL(visit.id,'') AS id,IFNULL(visit.date,'') AS visit_date,IFNULL(visit.review_start_date,'') AS review_start_date,"
+        String get_details = "SELECT IFNULL(visit.id,'') AS id,IFNULL(visit.visit_start_date,'') AS visit_start_date,IFNULL(visit.visit_end_date,'') AS visit_end_date,IFNULL(visit.review_start_date,'') AS review_start_date,"
             + "IFNULL(visit.review_end_date,'') AS review_end_date, IFNULL(area.name,'') AS area_of_observation, " +
             "IFNULL(visit_details.observation,'') AS observation,IFNULL(visit_details.implication,'') AS implication, IFNULL(visit_details.control_measure,'') AS control_measure," +
             "IFNULL(visit_details.recommendation,'') AS  recommendation, IFNULL(visit_details.responsibility,'') AS responsibility, IFNULL(visit_details.timeline,'') AS timeline," +
@@ -151,7 +172,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         conn.rs = conn.pst.executeQuery();
         while(conn.rs.next()){
          id = conn.rs.getString("id");
-         visit_date = conn.rs.getString("visit_date");
+         visit_start_date = conn.rs.getString("visit_start_date");
+         visit_end_date = conn.rs.getString("visit_end_date");
          review_start_date = conn.rs.getString("review_start_date");
          review_end_date = conn.rs.getString("review_end_date");
          area_of_observation = conn.rs.getString("area_of_observation");
@@ -164,8 +186,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
          implementation_status = conn.rs.getString("implementation_status");
          timestamp  = conn.rs.getString("timestamp"); 
             JSONObject obj = new JSONObject();
-            obj.put("id", run);
-            obj.put("visit_date", run);
+            obj.put("id", id);
+            obj.put("visit_start_date", visit_start_date);
+            obj.put("visit_end_date", visit_end_date);
             obj.put("review_start_date", review_start_date);
             obj.put("review_end_date", review_end_date);
             obj.put("area_of_observation", area_of_observation);
@@ -180,7 +203,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             jarray.add(obj);
         }
         
-        run2.setText("Date(s) of Visit: "+visit_date); // add from to dates here 
+        run2.setText("Date(s) of Visit: "+visit_start_date+" to "+visit_end_date); // add from to dates here 
         run2.addCarriageReturn();
         
         run2.setText("Reviewed Period: "+review_start_date+" to "+review_end_date);
@@ -203,7 +226,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
        for(int i=0; i<jarray.size();i++){
         JSONObject obj = (JSONObject) jarray.get(i);
          id = obj.get("id").toString();
-         visit_date = obj.get("visit_date").toString();
+         visit_start_date = obj.get("visit_start_date").toString();
+         visit_end_date = obj.get("visit_end_date").toString();
          review_start_date = obj.get("review_start_date").toString();
          review_end_date = obj.get("review_end_date").toString();
          area_of_observation = obj.get("area_of_observation").toString();
@@ -224,6 +248,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
           new_=1;
           areas_counter++;
           observations_counter=1;
+          }
+          else{
+           observations_counter++;   
           }
           
          }
@@ -295,6 +322,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
          
          
        }
+       
+       
      
          XWPFParagraph info_header_table = document.createParagraph();
          info_header_table.setAlignment(ParagraphAlignment.CENTER);
@@ -308,40 +337,179 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
          
       XWPFTable table = document.createTable();
       
-       //create first row
-      XWPFTableRow tableRowOne = table.getRow(0);
-      tableRowOne.getCell(0).setText("col one, row one");
-      tableRowOne.addNewTableCell().setText("col two, row one");
-      tableRowOne.addNewTableCell().setText("col three, row one");
+//      table.setStyleID("Grid Table 1 Light - Accent 1");
 		
+      
+       CTTblPr tblPr = table.getCTTbl().getTblPr();
+            CTString styleStr = tblPr.addNewTblStyle();
+            styleStr.setVal("Grid Table 1 Light - Accent 1");
+            table.setStyleID(styleStr.getVal());
+            
+            
+         XWPFParagraph tb_titles = document.createParagraph();
+         tb_titles.setAlignment(ParagraphAlignment.CENTER);
+         tb_titles.setSpacingBetween(1.2);
+         
+         XWPFRun run_h1 = tb_titles.createRun();
+            run_h1.setBold(true);
+            run_h1.setFontFamily("cambria");
+            run_h1.setFontSize(12);
+            run_h1.setText("Control Lapse Noted");
+
       //create second row
-      XWPFTableRow tableRowTwo = table.createRow();
-      tableRowTwo.setHeight(18);
-      tableRowTwo.getCell(0).setText("Control Lapse Noted");
-      tableRowTwo.getCell(1).setText("Implication");
-      tableRowTwo.getCell(2).setText("Required Control Measure");
-      tableRowTwo.getCell(3).setText("Recommendation");
-      tableRowTwo.getCell(4).setText("Responsibility, Timeline and Status");
+      XWPFTableRow tableRowTwo = table.getRow(0);
+      tableRowTwo.setHeight(14);
+      tableRowTwo.getCell(0).setParagraph(tb_titles);
+      tb_titles.removeRun(0);
+      
+      String titles[] = {"Implication","Requisite Measure","Recommendation","Responsibility, Timeline and Status"};
+      for(int g=0;g<4;g++){
+     
+          XWPFParagraph tb_title = document.createParagraph();
+         tb_title.setAlignment(ParagraphAlignment.CENTER);
+         tb_title.setSpacingBetween(1.2);
+         
+         XWPFRun run_h2 = tb_title.createRun();
+            run_h2.setBold(true);
+            run_h2.setFontFamily("cambria");
+            run_h2.setFontSize(12);
+            run_h2.setText(titles[g]);
+            
+      tableRowTwo.addNewTableCell().setParagraph(tb_title); 
+      tb_title.removeRun(0);
+      }
+
        
+            for(int i=0; i<jarray.size();i++){
+        JSONObject obj = (JSONObject) jarray.get(i);
+         id = obj.get("id").toString();
+         visit_start_date = obj.get("visit_start_date").toString();
+         visit_end_date = obj.get("visit_end_date").toString();
+         review_start_date = obj.get("review_start_date").toString();
+         review_end_date = obj.get("review_end_date").toString();
+         area_of_observation = obj.get("area_of_observation").toString();
+         observation = obj.get("observation").toString();
+         implication = obj.get("implication").toString();
+         control_measure = obj.get("control_measure").toString();
+         recommendation = obj.get("recommendation").toString();
+         responsibility = obj.get("responsibility").toString();
+         timeline = obj.get("timeline").toString();
+         implementation_status = obj.get("implementation_status").toString();
+         
+         new_=0;
+         if(i!=0){
+          JSONObject obj_checker = (JSONObject) jarray.get(i-1); 
+          String observation_area = obj_checker.get("area_of_observation").toString();
+          if(!observation_area.equals(area_of_observation)){
+          //creare a new header for this 
+          new_=1;
+          areas_counter++;
+          observations_counter=1;
+          }
+          
+         }
+         else{
+             areas_counter=1;
+             observations_counter=1;
+             
+         }
+         
+         if(i==0 || new_==1){
+             //headers row
+         
+             XWPFParagraph title_para = document.createParagraph();
+             XWPFRun runpara = title_para.createRun();
+             runpara.setBold(true);
+             runpara.setFontFamily("cambria");
+             runpara.setFontSize(14);
+             runpara.setText(area_of_observation);
+             
+      XWPFTableRow tableHeader = table.createRow();
+      tableHeader.setHeight(18);
+      tableHeader.setRepeatHeader(true);
+      tableHeader.getCell(0).setParagraph(title_para);
+
+       title_para.removeRun(0);
        
-      //Create a blank spreadsheet
-//        XWPFParagraph paragraph = document.createParagraph();
-//   
-//        XWPFRun run = paragraph.createRun();
+       tableHeader.getCell(1).setText("");
+       tableHeader.getCell(2).setText("");
+       tableHeader.getCell(3).setText("");
+       tableHeader.getCell(4).setText("");
+      
+       tableHeader.getCell(0).getCTTc().addNewTcPr();
+       tableHeader.getCell(0).getCTTc().getTcPr().addNewGridSpan();
+       tableHeader.getCell(0).getCTTc().getTcPr().getGridSpan().setVal(BigInteger.valueOf(5L));
+
+            for(int k=4;k>0;k--){
+             XWPFTableCell removed = tableHeader.getCell(k);
+             removed.getCTTc().newCursor().removeXml();
+             tableHeader.removeCell(k);
+            }       
+     
+     
+         }
+         
+      XWPFTableRow tableRowData = table.createRow();
+      tableRowData.setHeight(16);
+      tableRowData.getCell(0).setText(observation);
+      tableRowData.getCell(1).setText(implication);
+      tableRowData.getCell(2).setText(control_measure);
+      tableRowData.getCell(3).setText(recommendation);
+      tableRowData.getCell(4).setText("Responsibility \n"+responsibility+" Timeline\n"+timeline+" Status\n"+implementation_status);
+         
+       } 
+
+// create footer
+       CTSectPr sectPr = document.getDocument().getBody().addNewSectPr(); 
+        XWPFHeaderFooterPolicy policy = new XWPFHeaderFooterPolicy(document, sectPr);
+        CTP ctpFooter = CTP.Factory.newInstance();
+
+        XWPFParagraph[] parsFooter;
+
+        // add style (s.th.)
+        CTPPr ctppr = ctpFooter.addNewPPr();
+        CTString pst = ctppr.addNewPStyle();
+        pst.setVal("style21");
+        CTJc ctjc = ctppr.addNewJc();
+        ctjc.setVal(STJc.RIGHT);
+        ctppr.addNewRPr();
+
+        // add everything from the footerXXX.xml you need
+        CTR ctr = ctpFooter.addNewR();
+        ctr.addNewRPr();
+        CTFldChar fch = ctr.addNewFldChar();
+        fch.setFldCharType(STFldCharType.BEGIN);
+
+        ctr = ctpFooter.addNewR();
+        ctr.addNewInstrText().setStringValue(" PAGE ");
+
+        ctpFooter.addNewR().addNewFldChar().setFldCharType(STFldCharType.SEPARATE);
+
+        ctpFooter.addNewR().addNewT().setStringValue("1");
+
+        ctpFooter.addNewR().addNewFldChar().setFldCharType(STFldCharType.END);
+
+        XWPFParagraph footerParagraph = new XWPFParagraph(ctpFooter, document);
+
+        parsFooter = new XWPFParagraph[1];
+
+        parsFooter[0] = footerParagraph;
+
+        policy.createFooter(XWPFHeaderFooterPolicy.DEFAULT, parsFooter);
 
    
    
                  // write it as an excel attachment
-ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-document.write(outByteStream);
-byte [] outArray = outByteStream.toByteArray();
-response.setContentType("application/ms-excel");
-response.setContentLength(outArray.length);
-response.setHeader("Expires:", "0"); // eliminates browser caching
-response.setHeader("Content-Disposition", "attachment; filename=visit_report_generated_on__.docx");
-OutputStream outStream = response.getOutputStream();
-outStream.write(outArray);
-outStream.flush();
+    ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+    document.write(outByteStream);
+    byte [] outArray = outByteStream.toByteArray();
+    response.setContentType("application/ms-excel");
+    response.setContentLength(outArray.length);
+    response.setHeader("Expires:", "0"); // eliminates browser caching
+    response.setHeader("Content-Disposition", "attachment; filename="+partner_name.replace(" ", "_")+"_from_"+review_start_date.replace("-", "_")+"_to_"+review_end_date.replace("-", "_")+".docx");
+    OutputStream outStream = response.getOutputStream();
+    outStream.write(outArray);
+    outStream.flush();
 
     }
 
@@ -361,6 +529,8 @@ outStream.flush();
         processRequest(request, response);
     } catch (SQLException ex) {
         Logger.getLogger(visit_report.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (XmlException ex) {
+        Logger.getLogger(visit_report.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
 
@@ -378,6 +548,8 @@ outStream.flush();
     try {
         processRequest(request, response);
     } catch (SQLException ex) {
+        Logger.getLogger(visit_report.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (XmlException ex) {
         Logger.getLogger(visit_report.class.getName()).log(Level.SEVERE, null, ex);
     }
     }

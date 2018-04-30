@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
  */
 public class save_visit extends HttpServlet {
 HttpSession session;
-String obligation_id,visit_date,review_start_date,review_end_date,user_id;
+String obligation_id,visit_start_date,visit_end_date,review_start_date,review_end_date,user_id;
 String message;
 int code;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -34,7 +34,8 @@ int code;
             session = request.getSession();
             dbConn conn = new dbConn();
             
-            visit_date = request.getParameter("visit_date");
+            visit_start_date = request.getParameter("visit_start_date");
+            visit_end_date = request.getParameter("visit_end_date");
             review_start_date = request.getParameter("review_start_date");
             review_end_date = request.getParameter("review_end_date");
             obligation_id = message="";
@@ -43,23 +44,25 @@ int code;
                 obligation_id = session.getAttribute("obligation_id").toString();
                 user_id = session.getAttribute("id").toString();
               //check existence of record
-             String checker = "SELECT id FROM visit WHERE obligation_id=? AND date=?";
+             String checker = "SELECT id FROM visit WHERE obligation_id=? AND visit_start_date=? AND visit_end_date=?";
              conn.pst = conn.conn.prepareStatement(checker);
              conn.pst.setString(1, obligation_id);
-             conn.pst.setString(2, visit_date);
+             conn.pst.setString(2, visit_start_date);
+             conn.pst.setString(3, visit_end_date);
              conn.rs = conn.pst.executeQuery();
              if(conn.rs.next()){
               code = 0;
               message = "Visit details already exist in the system";
              }
              else{
-                 String add = "INSERT INTO visit (obligation_id,user_id,date,review_start_date,review_end_date) VALUES(?,?,?,?,?)";
+                 String add = "INSERT INTO visit (obligation_id,user_id,visit_start_date,review_start_date,review_end_date,visit_end_date) VALUES(?,?,?,?,?,?)";
                  conn.pst = conn.conn.prepareStatement(add);
                  conn.pst.setString(1, obligation_id);
                  conn.pst.setString(2, user_id);
-                 conn.pst.setString(3, visit_date);
+                 conn.pst.setString(3, visit_start_date);
                  conn.pst.setString(4, review_start_date);
                  conn.pst.setString(5, review_end_date);
+                 conn.pst.setString(6, visit_end_date);
                  
                  int num = conn.pst.executeUpdate();
                  if(num==1){

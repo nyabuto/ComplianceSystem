@@ -57,9 +57,10 @@
          <th> Officer Email </th>
          <th> Project Name </th>
          <th> LIP Name </th>
-         <th> Visit Date </th>
-         <th> Review Period Start Date </th>
-         <th> Review Period End Date </th>
+         <th> Visit Start Date </th>
+         <th> Visit End Date </th>
+         <th> Start of Review Period </th>
+         <th> End of Review Period </th>
          <th> Action</th>
         </tr>
         </thead>
@@ -99,7 +100,7 @@
 
 function changed(){
           var review_start_date = $("#review_start_date").val();
-           var visit_date = $("#visit_date").val();
+           var visit_date = $("#visit_start_date").val();
           $('#review_end_date').val("");
           $('#review_end_date').datepicker({
             format: 'yyyy-mm-dd',
@@ -113,9 +114,10 @@ function changed(){
 }
 
 function visit_changed(){
-          var visit_date = $("#visit_date").val();
+          var visit_date = $("#visit_start_date").val();
 //          alert(visit_date);
           $('#review_start_date').val("");
+          $('#visit_end_date').val("");
           $('#review_start_date').datepicker({
             format: 'yyyy-mm-dd',
             language: 'EN',
@@ -124,11 +126,20 @@ function visit_changed(){
             setDate: new Date(),
             todayHighlight: true
      });
+          $('#visit_end_date').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'EN',
+            autoclose: true,
+            startDate: new Date(visit_date),
+            endDate: new Date(),
+            setDate: new Date(),
+            todayHighlight: true
+     });
 }
 
 function changed_edit(){
           var review_start_date = $("#review_start_date_edit").val();
-           var visit_date = $("#visit_date_edit").val();
+           var visit_date = $("#visit_start_date_edit").val();
           $('#review_end_date_edit').val("");
           $('#review_end_date_edit').datepicker({
             format: 'yyyy-mm-dd',
@@ -142,14 +153,25 @@ function changed_edit(){
 }
 
 function visit_changed_edit(){
-          var visit_date = $("#visit_date_edit").val();
+          var visit_date = $("#visit_start_date_edit").val();
 //          alert(visit_date);
           $('#review_start_date_edit').val("");
+          $('#visit_end_date_edit').val("");
           $('#review_start_date_edit').datepicker({
             format: 'yyyy-mm-dd',
             language: 'EN',
             autoclose: true,
             endDate: new Date(visit_date),
+            setDate: new Date(),
+            todayHighlight: true
+     });
+     
+          $('#visit_end_date_edit').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'EN',
+            autoclose: true,
+            startDate: new Date(visit_date),
+            endDate: new Date(),
             setDate: new Date(),
             todayHighlight: true
      });
@@ -167,12 +189,12 @@ function visit_changed_edit(){
         type:"post",
         dataType:"json",
         success:function(raw_data){
-            var position=0,id,fullname,email,phone,lip_name,project_name,review_start_date,review_end_date,visit_date,output="";
+            var position=0,id,fullname,email,phone,lip_name,project_name,review_start_date,review_end_date,visit_start_date,visit_end_date,output="";
              var dataSet=[];
         var data=raw_data.data;
         for (var i=0; i<data.length;i++){
             position++;
-            id=fullname=email=phone=lip_name=project_name=review_start_date=review_end_date=visit_date="";
+            id=fullname=email=phone=lip_name=project_name=review_start_date=review_end_date=visit_start_date=visit_end_date="";
             if( data[i].id!=null){id = data[i].id;}
             if( data[i].fullname!=null){fullname = data[i].fullname;}
             if( data[i].email!=null){email = data[i].email;}
@@ -181,7 +203,8 @@ function visit_changed_edit(){
             if( data[i].project_name!=null){project_name = data[i].project_name;}
             if( data[i].review_start_date!=null){review_start_date = data[i].review_start_date;}
             if( data[i].review_end_date!=null){review_end_date = data[i].review_end_date;}
-            if( data[i].visit_date!=null){visit_date = data[i].visit_date;}
+            if( data[i].visit_start_date!=null){visit_start_date = data[i].visit_start_date;}
+            if( data[i].visit_end_date!=null){visit_end_date = data[i].visit_end_date;}
             
             var output='<div class="dropdown"><a href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-hamburger"></i></a><ul class="dropdown-menu  dropdown-menu-right">';
                 output+='<li><a class="btn btn-link" style="text-align:left;" href="details_sess?id='+id+'" /><i class="position-left"></i> Visit Details</a></li>';
@@ -190,7 +213,7 @@ function visit_changed_edit(){
                 output+='<input type="hidden" name="'+position+'" value="'+id+'" id="_'+position+'">';
                 output+='</ul></div>';
          
-            var minSet = [position,fullname,phone,email,project_name,lip_name,visit_date,review_start_date,review_end_date,output];
+            var minSet = [position,fullname,phone,email,project_name,lip_name,visit_start_date,visit_end_date,review_start_date,review_end_date,output];
            
            dataSet.push(minSet);
         }
@@ -231,15 +254,24 @@ function visit_changed_edit(){
                         '<form id="new_user" method="post" class="form-horizontal">' +
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Visit Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Visit Start Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<input id="visit_date" required name="visit_date" type="text" value="" onChange="visit_changed();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
+                                    '<input id="visit_start_date" required name="visit_start_date" type="text" value="" onChange="visit_changed();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
+                                '</div>' +
+                            '</div>' +
+                            
+                            
+                           
+                              '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Visit End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="visit_end_date" required name="visit_end_date" type="text" value="" onChange="visit_end_changed();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
                                 '</div>' +
                             '</div>' +
                             
                             
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Period Start Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Start of Review Period<b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_start_date" required name="review_start_date" onChange="changed();" type="text" value="" placeholder="Enter Review Start Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -247,7 +279,7 @@ function visit_changed_edit(){
                             
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Period End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">End of Review Period<b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_end_date" required name="review_end_date" type="text" value="" placeholder="Enter Review End Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -269,13 +301,14 @@ function visit_changed_edit(){
             className: 'btn-success',
             callback: function(){
              //gt values here
-             var visit_date,review_start_date,review_end_date;
-                visit_date = $("#visit_date").val();
+             var visit_start_date,visit_end_date,review_start_date,review_end_date;
+                visit_start_date = $("#visit_start_date").val();
+                visit_end_date = $("#visit_end_date").val();
                 review_start_date = $("#review_start_date").val();
                 review_end_date = $("#review_end_date").val();
 
-                if(visit_date!="" && review_start_date!="" && review_start_date!="" && review_end_date!=""){
-                var form_data = {"visit_date":visit_date,"review_start_date":review_start_date,"review_end_date":review_end_date};
+                if(visit_start_date!="" && visit_end_date!="" && review_start_date!="" && review_start_date!="" && review_end_date!=""){
+                var form_data = {"visit_start_date":visit_start_date,"visit_end_date":visit_end_date,"review_start_date":review_start_date,"review_end_date":review_end_date};
                 var theme="",header="",message="";
                 var url = "save_visit";
                    $.post(url,form_data , function(output) {
@@ -318,7 +351,7 @@ function visit_changed_edit(){
         }
     }
     });
-     $('#visit_date').datepicker({
+     $('#visit_start_date').datepicker({
             format: 'yyyy-mm-dd',
             language: 'EN',
             autoclose: true,
@@ -337,15 +370,17 @@ function visit_changed_edit(){
         type:"post",
         dataType:"json",
         success:function(raw_data){
-         var id,visit_date,review_start_date,review_end_date;
+         var id,visit_start_date,visit_end_date,review_start_date,review_end_date;
          var data = raw_data.data;
              
-             visit_date=review_start_date=review_end_date="";
-             if( data.visit_date!=null){visit_date = data.visit_date;}
+             visit_start_date=visit_end_date=review_start_date=review_end_date="";
+             if( data.visit_start_date!=null){visit_start_date = data.visit_start_date;}
+             if( data.visit_end_date!=null){visit_end_date = data.visit_end_date;}
              if( data.review_start_date!=null){review_start_date = data.review_start_date;}
              if( data.review_end_date!=null){review_end_date = data.review_end_date;}
          // ouput
-         $("#visit_date_edit").val(visit_date);
+         $("#visit_start_date_edit").val(visit_start_date);
+         $("#visit_end_date_edit").val(visit_end_date);
          $("#review_start_date_edit").val(review_start_date);
          $("#review_end_date_edit").val(review_end_date);
         }
@@ -354,21 +389,30 @@ function visit_changed_edit(){
     function edit(pos){
         var visit_id = $("#_"+pos).val();
             var dialog = bootbox.dialog({
-    title: '<b>New Visit</b>',
+    title: '<b>Update Visit Information</b>',
     message: '<div class="row">' +
                     '<div class="col-md-12">' +
                         '<form id="new_user" method="post" class="form-horizontal">' +
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Visit Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Visit Start Date <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<input id="visit_date_edit" required name="visit_date" type="text" value="" onChange="visit_changed_edit();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
+                                    '<input id="visit_start_date_edit" required name="visit_start_date" type="text" value="" onChange="visit_changed_edit();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
+                                '</div>' +
+                            '</div>' +
+                            
+                            
+                           
+                              '<div class="form-group">' +
+                                '<label class="col-md-4 control-label">Visit End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<div class="col-md-8">' +
+                                    '<input id="visit_end_date_edit" required name="visit_end_date" type="text" value="" onChange="visit_end_changed_edit();" placeholder="Enter Visit Date" readonly class="form-control" style="width:80%;">' +
                                 '</div>' +
                             '</div>' +
                             
                             
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Period Start Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">Start of Review Period<b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_start_date_edit" required name="review_start_date" onChange="changed_edit();" type="text" value="" placeholder="Enter Review Start Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -376,7 +420,7 @@ function visit_changed_edit(){
                             
                            
                               '<div class="form-group">' +
-                                '<label class="col-md-4 control-label">Review Period End Date <b style=\"color:red\">*</b> : </label>' +
+                                '<label class="col-md-4 control-label">End of Review Period<b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
                                     '<input id="review_end_date_edit" required name="review_end_date" type="text" value="" placeholder="Enter Review End Date" readonly class="form-control"  style="width:80%;">' +
                                 '</div>' +
@@ -398,13 +442,14 @@ function visit_changed_edit(){
             className: 'btn-success',
             callback: function(){
              //gt values here
-             var visit_date,review_start_date,review_end_date;
-                visit_date = $("#visit_date_edit").val();
+             var visit_start_date,visit_end_date,review_start_date,review_end_date;
+                visit_start_date = $("#visit_start_date_edit").val();
+                visit_end_date = $("#visit_end_date_edit").val();
                 review_start_date = $("#review_start_date_edit").val();
                 review_end_date = $("#review_end_date_edit").val();
 
-                if(visit_id!="" && visit_date!="" && review_start_date!="" && review_start_date!="" && review_end_date!=""){
-                var form_data = {"visit_id":visit_id,"visit_date":visit_date,"review_start_date":review_start_date,"review_end_date":review_end_date};
+                if(visit_id!="" && visit_start_date!="" && visit_end_date && review_start_date!="" && review_start_date!="" && review_end_date!=""){
+                var form_data = {"visit_id":visit_id,"visit_start_date":visit_start_date,"visit_end_date":visit_end_date,"review_start_date":review_start_date,"review_end_date":review_end_date};
                 var theme="",header="",message="";
                 var url = "update_visit";
                    $.post(url,form_data , function(output) {
@@ -447,7 +492,7 @@ function visit_changed_edit(){
         }
     }
     });
-     $('#visit_date_edit').datepicker({
+     $('#visit_start_date_edit').datepicker({
             format: 'yyyy-mm-dd',
             language: 'EN',
             autoclose: true,

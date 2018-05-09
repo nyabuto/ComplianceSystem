@@ -24,14 +24,14 @@
 <style>
     .title{
         font-family: Merienda One;
-	font-size: 30px;
+	font-size: 35px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 900;
 	line-height: 26.4px;
     }    
     .row{
-        margin-top: 10%;
+        margin-top: 3%;
     }
     .header{
         padding-top: 8%;
@@ -48,14 +48,17 @@
 </style>
  
 </head>
-<body>
-	<div class="row">
-		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
-			<div class="login-panel panel panel-default">
+<body style="margin-left: 7%;">
+    <br><br>
+    <div class="title" style="text-align: center;">Compliance Monitoring Information System <br><br>(CMIS)</div>
+                                <br>
+                                <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+                    
+                    <div class="login-panel panel panel-default">
                             
                             <div class="text-center header">
-                                <div class="title">Compliance System</div>
-                                <br>
+                                
                                 <div class="icon-object border-slate-300 text-slate-300"><img class='header-img' style="height: 50px;" src="images/hsdsa/hsdsa-full.png"></div>
                                 <h4 style="font-weight: bolder;" class="content-group">Login to your account </h4>
 							</div>

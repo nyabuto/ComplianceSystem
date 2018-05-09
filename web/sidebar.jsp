@@ -70,6 +70,9 @@
 					<li><a class="" href="partners.jsp">
 						<span class="fa fa-won">&nbsp;</span> Implementing Partners
 					</a></li>
+					<li><a class="" href="obligation.jsp">
+						<span class="fa fa-won">&nbsp;</span> Obligation
+					</a></li>
 					<li><a class="" href="users.jsp">
 						<span class="fa fa-user">&nbsp;</span> Users
 					</a></li>

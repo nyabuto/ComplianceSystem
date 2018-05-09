@@ -560,7 +560,7 @@ function visit_changed(){
                               '<div class="form-group">' +
                                 '<label class="col-md-4 control-label">Requisite Measure <b style=\"color:red\">*</b> : </label>' +
                                 '<div class="col-md-8">' +
-                                    '<textarea id="control_measure" required name="control_measure" type="text" value="" placeholder="Enter control measure" class="form-control"  style="width:80%;"></textarea>' +
+                                    '<textarea id="control_measure" required name="control_measure" type="text" value="" placeholder="Enter Requisite measure" class="form-control"  style="width:80%;"></textarea>' +
                                 '</div>' +
                             '</div>' +
                             

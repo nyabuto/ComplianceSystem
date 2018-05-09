@@ -37,7 +37,6 @@ int status,level,code;
            
            email = request.getParameter("email");
            pass = request.getParameter("password");
-           
            //encrypt the password
              m = MessageDigest.getInstance("MD5");
             m.update(pass.getBytes(), 0, pass.length());

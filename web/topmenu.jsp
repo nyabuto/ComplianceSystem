@@ -34,9 +34,9 @@
 				<!--<a class="navbar-brand" href="#"><span>Compliance System</span> | HSDSA <%=year%> </a>-->
 				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown"><a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-						<em class="fa fa-envelope"></em><span class="label label-danger">15</span>
+						<!--<em class="fa fa-envelope"></em><span class="label label-danger">15</span>-->
 					</a>
-						<ul class="dropdown-menu dropdown-messages">
+<!--						<ul class="dropdown-menu dropdown-messages">
 							<li>
 								<div class="dropdown-messages-box"><a href="profile.html" class="pull-left">
 									<img alt="image" class="img-circle" src="http://placehold.it/40/30a5ff/fff">
@@ -62,12 +62,12 @@
 									<em class="fa fa-inbox"></em> <strong>All Messages</strong>
 								</a></div>
 							</li>
-						</ul>
+						</ul>-->
 					</li>
 					<li class="dropdown"><a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-						<em class="fa fa-bell"></em><span class="label label-info">5</span>
+						<!--<em class="fa fa-bell"></em><span class="label label-info">5</span>-->
 					</a>
-						<ul class="dropdown-menu dropdown-alerts">
+<!--						<ul class="dropdown-menu dropdown-alerts">
 							<li><a href="#">
 								<div><em class="fa fa-envelope"></em> 1 New Message
 									<span class="pull-right text-muted small">3 mins ago</span></div>
@@ -82,7 +82,7 @@
 								<div><em class="fa fa-user"></em> 5 New Followers
 									<span class="pull-right text-muted small">4 mins ago</span></div>
 							</a></li>
-						</ul>
+						</ul>-->
 					</li>
 				</ul>
 			</div>
